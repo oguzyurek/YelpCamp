@@ -9,6 +9,11 @@
             <label for="location">Location</label>
             <input type="text" id="location" name="campground[location]" value="<%= campground.location%>">
         </div>
+        <div>
+            
+            <textarea name="campground[description]" id="" cols="30" rows="10" type="text"
+                id="location"><%= campground.description%></textarea>
+        </div>
         <button>Update Campground</button>
     </form>
     <a href="/campgrounds/<%= campground._id%>">Back To Campground</a>
