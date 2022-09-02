@@ -102,6 +102,9 @@ app.use((err, req, res, next) => {
     console.log('*********ERROR********')
     console.log('**********************')
     res.status(500).send('Oh we got an ERROR')
+    console.log(err)
+    next(err)
+
 })
 
 app.listen(3000, () => {
