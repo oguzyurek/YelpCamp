@@ -7,6 +7,7 @@ const methodOverride = require('method-override');
 const Campground = require('./models/campground');
 const morgan = require('morgan');
 const { time } = require('console');
+const AppError = require('./AppError');
 
 mongoose.connect('mongodb://localhost:27017/yelp-camp', {
     useNewUrlParser: true,
@@ -38,10 +39,9 @@ app.use((req, res, next) => {
 const verifyPassword = (req, res, next) => {
     const { password } = req.query
     if (password === 'newyork') {
-         next()
+        next()
     }
-    res.status(401)
-    throw new Error('Password required!')
+    throw new AppError('Password required!',401)
 };
 
 app.get('/', (req, res) => {
