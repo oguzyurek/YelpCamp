@@ -62,14 +62,16 @@ app.post('/campgrounds', async (req, res) => {
     res.redirect(`/campgrounds/${campground._id}`)
 })
 
-app.get('/campgrounds/:id', async (req, res,) => {
+app.get('/campgrounds/:id', async (req, res, next) => {
     const campground = await Campground.findById(req.params.id)
+    if (!campground) {
+        return next(new AppError('Camground Not Found', 404))
+    }
     res.render('campgrounds/show', { campground });
 });
 
 app.get('/campgrounds/:id/edit', async (req, res) => {
     const campground = await Campground.findById(req.params.id)
-
     res.render('campgrounds/edit', { campground });
 })
 
