@@ -41,7 +41,7 @@ const verifyPassword = (req, res, next) => {
     if (password === 'newyork') {
         next()
     }
-    throw new AppError('Password required!',401)
+    throw new AppError('Password required!', 401)
 };
 
 app.get('/', (req, res) => {
@@ -94,17 +94,26 @@ app.get('/error', (req, res) => {
     chicken.fly()
 })
 
+app.get('/admin', (req, res) => {
+    throw new AppError('You are not an Admin!', 403)
+})
+
 // app.use((req, res) => {
 //     res.status(404).send('404 NOT FOUND')
 // })
 
-app.use((err, req, res, next) => {
-    console.log('**********************')
-    console.log('*********ERROR********')
-    console.log('**********************')
-    console.log(err)
-    next(err)
+// app.use((err, req, res, next) => {
+//     console.log('**********************')
+//     console.log('*********ERROR********')
+//     console.log('**********************')
+//     console.log(err)
+//     next(err)
 
+// })
+
+app.use((err, req, res, next) => {
+    const { status = 500, message = 'error' } = err;
+    res.status(status).send(message)
 })
 
 app.listen(3000, () => {
