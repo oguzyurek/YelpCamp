@@ -38,9 +38,10 @@ app.use((req, res, next) => {
 const verifyPassword = (req, res, next) => {
     const { password } = req.query
     if (password === 'newyork') {
-        return next()
+         next()
     }
-    res.send('Sorry you need to enter the right password!')
+    res.status(401)
+    throw new Error('Password required!')
 };
 
 app.get('/', (req, res) => {
@@ -101,7 +102,6 @@ app.use((err, req, res, next) => {
     console.log('**********************')
     console.log('*********ERROR********')
     console.log('**********************')
-    res.status(500).send('Oh we got an ERROR')
     console.log(err)
     next(err)
 
