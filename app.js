@@ -89,8 +89,19 @@ app.delete('/campgrounds/:id', async (req, res) => {
     res.redirect('/campgrounds');
 })
 
-app.use((req, res) => {
-    res.status(404).send('404 NOT FOUND')
+app.get('/error', (req, res) => {
+    chicken.fly()
+})
+
+// app.use((req, res) => {
+//     res.status(404).send('404 NOT FOUND')
+// })
+
+app.use((err, req, res, next) => {
+    console.log('**********************')
+    console.log('*********ERROR********')
+    console.log('**********************')
+    res.status(500).send('Oh we got an ERROR')
 })
 
 app.listen(3000, () => {
