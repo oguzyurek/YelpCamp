@@ -56,40 +56,63 @@ app.get('/campgrounds/new', (req, res) => {
     res.render('campgrounds/new');
 })
 
-app.post('/campgrounds', async (req, res) => {
-    const campground = new Campground(req.body.campground);
-    await campground.save();
-    res.redirect(`/campgrounds/${campground._id}`)
+app.post('/campgrounds', async (req, res, next) => {
+    try {
+        const campground = new Campground(req.body.campground);
+        await campground.save();
+        res.redirect(`/campgrounds/${campground._id}`)
+    } catch (e) {
+        next(e);
+    }
 })
 
 app.get('/campgrounds/:id', async (req, res, next) => {
-    const campground = await Campground.findById(req.params.id)
-    if (!campground) {
-        return next(new AppError('Camground Not Found', 404))
+    try {
+        const campground = await Campground.findById(req.params.id)
+        if (!campground) {
+            return next(new AppError('Camground Not Found', 404))
+        }
+        res.render('campgrounds/show', { campground });
+    } catch (e) {
+        next(e)
     }
-    res.render('campgrounds/show', { campground });
 });
 
-app.get('/campgrounds/:id/edit', async (req, res) => {
-    const campground = await Campground.findById(req.params.id)
-    res.render('campgrounds/edit', { campground });
+app.get('/campgrounds/:id/edit', async (req, res, next) => {
+    try {
+        const campground = await Campground.findById(req.params.id)
+        res.render('campgrounds/edit', { campground });
+    } catch (e) {
+        next(e)
+    }
+
 })
 
 app.get('/secret', verifyPassword, (req, res) => {
     res.send('This is my secret.')
 })
 
-app.put('/campgrounds/:id', async (req, res) => {
-    const { id } = req.params;
-    const campground = await Campground.findByIdAndUpdate(id, { ...req.body.campground });
-    res.redirect(`/campgrounds/${campground._id}`)
+app.put('/campgrounds/:id', async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const campground = await Campground.findByIdAndUpdate(id, { ...req.body.campground });
+        res.redirect(`/campgrounds/${campground._id}`)
+    } catch (e) {
+        next(e);
+    }
+
 });
 
-app.delete('/campgrounds/:id', async (req, res) => {
-    const { id } = req.params;
-    const deleted = await Campground.findByIdAndDelete(id);
-    console.log(`${deleted.title} ${deleted.location}  is deleted.`)
-    res.redirect('/campgrounds');
+app.delete('/campgrounds/:id', async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const deleted = await Campground.findByIdAndDelete(id);
+        console.log(`${deleted.title} ${deleted.location}  is deleted.`)
+        res.redirect('/campgrounds');
+    } catch (e) {
+        next(e)
+    }
+
 })
 
 app.get('/error', (req, res) => {
