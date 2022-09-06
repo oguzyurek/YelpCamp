@@ -8,7 +8,7 @@ const Campground = require('./models/campground');
 const morgan = require('morgan');
 const { time } = require('console');
 const AppError = require('./utils/AppError');
-const AppError = require('./utils/ExpressError');
+const ExpressError = require('./utils/ExpressError');
 const { wrap } = require('module');
 
 mongoose.connect('mongodb://localhost:27017/yelp-camp', {
