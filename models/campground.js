@@ -7,7 +7,10 @@ const CampgroundSchema = new Schema({
         required: [true, 'name can not be blank']
     },
     image: String,
-    price: Number,
+    price: {
+        type: Number,
+        min: 0,
+    },
     description: String,
     location: String
 });
