@@ -1,28 +1,30 @@
 <% layout('layouts/boilerplate') %>
-    <div class="modal-body row">
-        <div class="col-md-6 ">
-            <img src="<%= campground.image %>" class="rounded-4 img-fluid" alt="..." alt="">
-        </div>
+    <div class="container">
+        <div class="modal-body row">
+            <div class="col-md-6 ">
+                <img src="<%= campground.image %>" class="rounded-4 img-fluid" alt="..." alt="">
+            </div>
 
-        <div class="col-md-6">
-            <h1>
-                <%= campground.title %>
-            </h1>
-            <h2>
-                <%= campground.location %>
-            </h2>
-            <h3 class="text-muted">
-                $<%= campground.price %>
-            </h3>
-            <p>
-                <%= campground.description%>
-            </p>
-            <p> <a class="btn btn-info" href="/campgrounds/<%=campground._id%>/edit">Edit</a>
-            </p>
-            <p>
-            <form action="/campgrounds/<%=campground._id%>?_method=DELETE" method="POST">
-                <button class="btn btn-danger">Delete</button>
-            </form>
-            </p>
+            <div class="col-md-6">
+                <h1>
+                    <%= campground.title %>
+                </h1>
+                <h2>
+                    <%= campground.location %>
+                </h2>
+                <h3 class="text-muted">
+                    $<%= campground.price %>
+                </h3>
+                <p>
+                    <%= campground.description%>
+                </p>
+                <p> <a class="btn btn-info" href="/campgrounds/<%=campground._id%>/edit">Edit</a>
+                </p>
+                <p>
+                <form action="/campgrounds/<%=campground._id%>?_method=DELETE" method="POST">
+                    <button class="btn btn-danger">Delete</button>
+                </form>
+                </p>
+            </div>
         </div>
     </div>
