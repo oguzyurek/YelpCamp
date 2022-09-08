@@ -105,6 +105,10 @@ app.get('/error', (req, res) => {
     chicken.fly()
 })
 
+app.get('/dogs', (req, res) => {
+    res.send('Whoof Whoof!')
+})
+
 app.get('/admin', (req, res) => {
     throw new AppError('You are not an Admin!', 403)
 })
