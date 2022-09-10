@@ -6,7 +6,6 @@ const ejsMate = require('ejs-mate');
 const methodOverride = require('method-override');
 const Campground = require('./models/campground');
 const morgan = require('morgan');
-const Joi = require('joi');
 const { campgroundSchema } = require('./schemas.js');
 const { time } = require('console');
 const AppError = require('./utils/AppError');
