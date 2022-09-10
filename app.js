@@ -7,6 +7,7 @@ const methodOverride = require('method-override');
 const Campground = require('./models/campground');
 const morgan = require('morgan');
 const Joi = require('joi');
+const { campgroundSchema } = require('./schemas.js');
 const { time } = require('console');
 const AppError = require('./utils/AppError');
 const ExpressError = require('./utils/ExpressError');
@@ -48,16 +49,6 @@ const verifyPassword = (req, res, next) => {
 };
 
 const validateCampground = (req, res, next) => {
-    const campgroundSchema = Joi.object({
-
-        campground: Joi.object({
-            title: Joi.string().required(),
-            location: Joi.string().required(),
-            price: Joi.number().required().min(0),
-            image: Joi.string().required(),
-            description: Joi.string().required(),
-        }).required()
-    })
     const { error } = campgroundSchema.validate(req.body);
     if (error) {
         const msg = error.details.map(el => el.message).join(`,`)
@@ -110,7 +101,7 @@ app.get('/secret', verifyPassword, (req, res) => {
     res.send('This is my secret.')
 })
 
-app.put('/campgrounds/:id', wrapAsync(async (req, res, next) => {
+app.put('/campgrounds/:id', validateCampground, wrapAsync(async (req, res, next) => {
     const { id } = req.params;
     const campground = await Campground.findByIdAndUpdate(id, { ...req.body.campground });
     res.redirect(`/campgrounds/${campground._id}`)
