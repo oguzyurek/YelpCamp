@@ -47,6 +47,26 @@ const verifyPassword = (req, res, next) => {
     throw new AppError('Password required!', 401)
 };
 
+const validateCampground = (req, res, next) => {
+    const campgroundSchema = Joi.object({
+
+        campground: Joi.object({
+            title: Joi.string().required(),
+            location: Joi.string().required(),
+            price: Joi.number().required().min(0),
+            image: Joi.string().required(),
+            description: Joi.string().required(),
+        }).required()
+    })
+    const { error } = campgroundSchema.validate(req.body);
+    if (error) {
+        const msg = error.details.map(el => el.message).join(`,`)
+        throw new ExpressError(msg, 400)
+    } else {
+        next();
+    }
+}
+
 app.get('/', (req, res) => {
     res.render('home')
 });
@@ -66,21 +86,7 @@ app.get('/campgrounds/new', (req, res) => {
     res.render('campgrounds/new');
 })
 
-app.post('/campgrounds', wrapAsync(async (req, res, next) => {
-    const campgroundSchema = Joi.object({
-        campground: Joi.object({
-            title: Joi.string().required(),
-            location: Joi.string().required(),
-            price: Joi.number().required().min(0),
-            image: Joi.string().required(),
-            description: Joi.string().required(),
-        }).required()
-    })
-    const { error } = campgroundSchema.validate(req.body);
-    if (error) {
-        const msg = error.details.map(el => el.message).join(`,`)
-        throw new ExpressError(msg, 400)
-    }
+app.post('/campgrounds', validateCampground, wrapAsync(async (req, res, next) => {
     console.log(result);
     const campground = new Campground(req.body.campground);
     await campground.save();
