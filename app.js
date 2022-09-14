@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const ejsMate = require('ejs-mate');
 const methodOverride = require('method-override');
 const Campground = require('./models/campground');
+const Review = require('./models/review');
 const morgan = require('morgan');
 const { campgroundSchema } = require('./schemas.js');
 const { time } = require('console');
