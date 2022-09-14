@@ -30,24 +30,36 @@
                     <h2>Reviews</h2>
 
 
-        
-
-                            <form action="/campgrounds/<%=campground._id%>/reviews" method="POST">
-                                <div class="mb-3">
-                                    <label class="form-label" for="rating">Rating</label>
-                                    <input class="form-range" type="range" min="0" max="5" name="review[rating]"
-                                        id="rating">
-                                </div>
-
-                                <div class="mb-3">
-                                    <label class="form-label" for="body">Review</label>
-                                    <textarea class="form-control" name="review[body]" id="body" cols="10" rows="3"
-                                        required></textarea>
-                                </div>
 
 
-                                <button class="btn btn-success">Submit</button>
-                            </form>
+                    <form action="/campgrounds/<%=campground._id%>/reviews" method="POST">
+                        <div class="mb-3">
+                            <label class="form-label" for="rating">Rating</label>
+                            <input class="form-range" type="range" min="0" max="5" name="review[rating]" id="rating">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label" for="body">Review</label>
+                            <textarea class="form-control" name="review[body]" id="body" cols="10" rows="3"
+                                required></textarea>
+                        </div>
+
+
+                        <button class="btn btn-success">Submit</button>
+                    </form>
+
+
+                    <div>
+                        <% for (let review of campground.reviews){ %>
+                            <div class="mb-3 mt-3">
+                                <p>
+                                    <%= review.rating %>
+                                    <%= review.body %>
+                                </p>
+                            </div>
+
+                            <% } %>
+                    </div>
                 </div>
             </div>
 

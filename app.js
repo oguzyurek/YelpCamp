@@ -85,7 +85,7 @@ app.post('/campgrounds', validateCampground, wrapAsync(async (req, res, next) =>
 }))
 
 app.get('/campgrounds/:id', wrapAsync(async (req, res, next) => {
-    const campground = await Campground.findById(req.params.id)
+    const campground = await Campground.findById(req.params.id).populate('reviews');
     if (!campground) {
         return next(new AppError('Camground Not Found', 404))
     }
