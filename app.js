@@ -114,7 +114,7 @@ app.delete('/campgrounds/:id', wrapAsync(async (req, res, next) => {
     res.redirect('/campgrounds');
 }))
 
-////////////////////////////////////////////////////
+//////REVIEWS////////////REVIEWS////////////REVIEWS////////////
 
 app.post('/campgrounds/:id/reviews', wrapAsync(async (req, res, next) => {
     const campground = await Campground.findById(req.params.id);
@@ -123,6 +123,15 @@ app.post('/campgrounds/:id/reviews', wrapAsync(async (req, res, next) => {
     await review.save();
     await campground.save();
     res.redirect(`/campgrounds/${campground._id}`)
+
+}));
+
+app.delete('/campgrounds/:id/reviews/:reviewId', wrapAsync(async (res, req, next) => {
+    const { id, reviewId } = req.params;
+    Campground.findByIdAndUpdate(id, { $pull: { reviews, reviewId } });
+    await Review.findByIdAndDelete(reviewId);
+    res.redirect(`/campgrounds/${campground._id}`)
+
 
 }))
 
@@ -136,7 +145,7 @@ app.post('/campgrounds/:id/reviews', wrapAsync(async (req, res, next) => {
 
 
 
-////////////////////////////////////////////////////
+//////REVIEWS////////////REVIEWS////////////REVIEWS////////////
 app.get('/error', (req, res) => {
     chicken.fly()
 })
