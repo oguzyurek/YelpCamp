@@ -126,16 +126,12 @@ app.post('/campgrounds/:id/reviews', wrapAsync(async (req, res, next) => {
 
 }));
 
-app.delete('/campgrounds/:id/reviews/:reviewId', wrapAsync(async (res, req, next) => {
+app.delete('/campgrounds/:id/reviews/:reviewId', wrapAsync(async (req, res, next) => {
     const { id, reviewId } = req.params;
-    Campground.findByIdAndUpdate(id, { $pull: { reviews, reviewId } });
+    await Campground.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });
     await Review.findByIdAndDelete(reviewId);
-    res.redirect(`/campgrounds/${campground._id}`)
-
-
+    res.redirect(`/campgrounds/${id}`)
 }))
-
-
 
 
 
