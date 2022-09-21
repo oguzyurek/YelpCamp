@@ -14,9 +14,10 @@ const ExpressError = require('./utils/ExpressError');
 const { wrap } = require('module');
 const session = require('express-session');
 const sessionOption = { secret: 'thisisasecret', resave: false, saveUninitialized: false }
+const flash = require('connect-flash');
 
 
-app.use(session(sessionOption));
+
 
 mongoose.connect('mongodb://localhost:27017/yelp-camp', {
     useNewUrlParser: true,
@@ -37,6 +38,8 @@ app.set('views', path.join(__dirname, 'views'))
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 app.use(morgan('dev'))
+app.use(session(sessionOption));
+app.use(flash())
 
 app.use((req, res, next) => {
     req.requestTime = Date.now();
@@ -94,7 +97,8 @@ app.get('/campgrounds/:id', wrapAsync(async (req, res, next) => {
     if (!campground) {
         return next(new AppError('Camground Not Found', 404))
     }
-    res.render('campgrounds/show', { campground })
+
+    res.render('campgrounds/show', { campground, messages: req.flash('success') })
 }));
 
 app.get('/campgrounds/:id/edit', wrapAsync(async (req, res, next) => {
@@ -139,6 +143,7 @@ app.post('/campgrounds/:id/reviews', validateReview, wrapAsync(async (req, res, 
     campground.reviews.push(review);
     await review.save();
     await campground.save();
+    req.flash('success', 'Successfully added a new comment.')
     res.redirect(`/campgrounds/${campground._id}`)
 
 }));

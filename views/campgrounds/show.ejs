@@ -49,28 +49,28 @@
                         <button class="btn btn-success">Submit</button>
                     </form>
 
+                    <%= messages %>
+                        <div>
+                            <% for (let review of campground.reviews){ %>
+                                <div class="card mb-2 mt-2">
+                                    <div class="card-body">
 
-                    <div>
-                        <% for (let review of campground.reviews){ %>
-                            <div class="card mb-2 mt-2">
-                                <div class="card-body">
+                                        <h5 class="card-title"> Rating: <%= review.rating %>
+                                        </h5>
+                                        <p>
+                                            <%= review.body %>
+                                        </p>
+                                        <form
+                                            action="/campgrounds/<%=campground._id%>/reviews/<%=review._id%>?_method=DELETE"
+                                            method="POST">
+                                            <button class="btn btn-sm btn-danger">Delete</button>
+                                        </form>
+                                    </div>
 
-                                    <h5 class="card-title"> Rating: <%= review.rating %>
-                                    </h5>
-                                    <p>
-                                        <%= review.body %>
-                                    </p>
-                                    <form
-                                        action="/campgrounds/<%=campground._id%>/reviews/<%=review._id%>?_method=DELETE"
-                                        method="POST">
-                                        <button class="btn btn-sm btn-danger">Delete</button>
-                                    </form>
                                 </div>
 
-                            </div>
-
-                            <% } %>
-                    </div>
+                                <% } %>
+                        </div>
                 </div>
             </div>
 
