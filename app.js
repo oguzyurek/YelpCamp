@@ -48,6 +48,26 @@ app.use((req, res, next) => {
     return next();
 })
 
+/////FLASH/////FLASH/////FLASH/////FLASH/////FLASH/////FLASH/////FLASH
+
+app.use((req, res, next) => {
+    res.locals.messages = req.flash('success');
+    next();
+})
+
+
+
+
+
+
+
+
+
+
+
+/////FLASH/////FLASH/////FLASH/////FLASH/////FLASH/////FLASH/////FLASH
+
+
 const verifyPassword = (req, res, next) => {
     const { password } = req.query
     if (password === 'newyork') {
@@ -98,7 +118,7 @@ app.get('/campgrounds/:id', wrapAsync(async (req, res, next) => {
         return next(new AppError('Camground Not Found', 404))
     }
 
-    res.render('campgrounds/show', { campground, messages: req.flash('success') })
+    res.render('campgrounds/show', { campground })
 }));
 
 app.get('/campgrounds/:id/edit', wrapAsync(async (req, res, next) => {
