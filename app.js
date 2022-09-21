@@ -12,6 +12,11 @@ const { time } = require('console');
 const AppError = require('./utils/AppError');
 const ExpressError = require('./utils/ExpressError');
 const { wrap } = require('module');
+const session = require('express-session');
+const sessionOption = { secret: 'thisisasecret', resave: false, saveUninitialized: false }
+
+
+app.use(session(sessionOption));
 
 mongoose.connect('mongodb://localhost:27017/yelp-camp', {
     useNewUrlParser: true,
