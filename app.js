@@ -86,15 +86,17 @@ const validateCampground = (req, res, next) => {
     }
 }
 
-app.get('/', (req, res) => {
-    res.render('home')
-});
-
 function wrapAsync(fn) {
     return function (req, res, next) {
         fn(req, res, next).catch(e => next(e))
     }
 }
+
+
+app.get('/', (req, res) => {
+    res.render('home')
+});
+
 
 app.get('/campgrounds', wrapAsync(async (req, res) => {
     const campgrounds = await Campground.find({});
