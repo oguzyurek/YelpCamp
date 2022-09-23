@@ -1,9 +1,31 @@
 const express = require('express');
 const router = express.Router();
 
-router.get('/', (req, res) => {
+function wrapAsync(fn) {
+    return function (req, res, next) {
+        fn(req, res, next).catch(e => next(e))
+    }
+}
 
-})
+const verifyPassword = (req, res, next) => {
+    const { password } = req.query
+    if (password === 'newyork') {
+        next()
+    }
+    throw new AppError('Password required!', 401)
+};
+
+const validateCampground = (req, res, next) => {
+    const { error } = campgroundSchema.validate(req.body);
+    if (error) {
+        const msg = error.details.map(el => el.message).join(`,`)
+        throw new ExpressError(msg, 400)
+    } else {
+        next();
+    }
+}
+
+///////////////////////////
 
 
 router.get('/', (req, res) => {
@@ -57,3 +79,6 @@ router.delete('/campgrounds/:id', wrapAsync(async (req, res, next) => {
     console.log(`${deleted.title} ${deleted.location}  is deleted.`)
     res.redirect('/campgrounds');
 }))
+
+
+module.exports = router;
