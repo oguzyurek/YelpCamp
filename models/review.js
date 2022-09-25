@@ -1,14 +1,15 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const reviewSchema = new Schema({
-    body: String,
-    rating: Number,
-    author: {
-        type: Schema.Types.ObjectId,
-        ref: 'User'
+const ReviewSchema = new Schema({
+    body: {
+        type: String,
+        required: [true, 'name can not be blank']
+    },
+    rating: {
+        type: Number,
+        required: true
     }
 });
 
-module.exports = mongoose.model("Review", reviewSchema);
-
+module.exports = mongoose.model('Review', ReviewSchema);
