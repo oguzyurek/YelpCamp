@@ -1,4 +1,5 @@
 const express = require('express');
+const app = express();
 const router = express.Router();
 
 
@@ -76,3 +77,5 @@ app.delete('/campgrounds/:id', wrapAsync(async (req, res, next) => {
     console.log(`${deleted.title} ${deleted.location}  is deleted.`)
     res.redirect('/campgrounds');
 }))
+
+module.exports = campgroundsRouter;
