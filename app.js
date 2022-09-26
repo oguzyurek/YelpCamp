@@ -18,6 +18,7 @@ const flash = require('connect-flash');
 const campgrounds = require('./routes/campgrounds')
 
 
+
 /////DATABASE/////DATABASE/////DATABASE/////DATABASE/////DATABASE/////DATABASE
 
 mongoose.connect('mongodb://localhost:27017/yelp-camp', {
@@ -43,6 +44,7 @@ app.use(methodOverride('_method'));
 app.use(morgan('dev'))
 app.use(session(sessionOption));
 app.use(flash())
+app.use('/campgrounds', campgrounds)
 
 
 
@@ -55,7 +57,6 @@ app.use((req, res, next) => {
 
 /////ROUTES/////ROUTES/////ROUTES/////ROUTES/////ROUTES/////ROUTES////
 
-app.use('/campgrounds', campgrounds)
 
 
 
