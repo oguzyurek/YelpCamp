@@ -18,7 +18,7 @@ const flash = require('connect-flash');
 const campgrounds = require('./routes/campgrounds')
 
 
-
+/////DATABASE/////DATABASE/////DATABASE/////DATABASE/////DATABASE/////DATABASE
 
 mongoose.connect('mongodb://localhost:27017/yelp-camp', {
     useNewUrlParser: true,
@@ -31,6 +31,8 @@ db.on("error", console.error.bind(console, "connection error:"));
 db.once("open", () => {
     console.log("Database connected");
 });
+
+/////DATABASE/////DATABASE/////DATABASE/////DATABASE/////DATABASE/////DATABASE
 
 app.engine('ejs', ejsMate);
 app.set('view engine', 'ejs');
@@ -138,22 +140,14 @@ app.delete('/campgrounds/:id/reviews/:reviewId', wrapAsync(async (req, res, next
     res.redirect(`/campgrounds/${id}`)
 }))
 
-
-
-
-
-
-
-
-
 //////REVIEWS////////////REVIEWS////////////REVIEWS////////////
-app.get('/error', (req, res) => {
-    chicken.fly()
-})
+
 
 app.get('/dogs', (req, res) => {
     res.send('Whoof Whoof!')
 })
+
+/////ERROR/////ERROR/////ERROR/////ERROR/////ERROR/////ERROR/////ERROR/////ERROR
 
 app.get('/admin', (req, res) => {
     throw new AppError('You are not an Admin!', 403)
@@ -179,6 +173,11 @@ app.use((err, req, res, next) => {
     if (!err.message) err.message = 'Oh no, Something went wrong!'
     res.status(statusCode).render('error', { err })
 })
+
+/////ERROR/////ERROR/////ERROR/////ERROR/////ERROR/////ERROR/////ERROR/////ERROR
+
+
+
 
 app.listen(3000, () => {
     console.log('Serving on port 3000')
