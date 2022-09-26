@@ -3,4 +3,3 @@ module.exports = func => {
         func(req, res, next).catch(next);
     }
 }
-
