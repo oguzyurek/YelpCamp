@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const router = express.Router();
+const { campgroundSchema, reviewSchema } = require('../schemas.js');
 const Campground = require('../models/campground');
 const Review = require('../models/review');
 const AppError = require('../utils/AppError');
