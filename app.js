@@ -18,7 +18,7 @@ const flash = require('connect-flash');
 const campgrounds = require('./routes/campgrounds')
 
 
-
+/////DATABASE/////DATABASE/////DATABASE/////DATABASE/////DATABASE/////DATABASE
 
 mongoose.connect('mongodb://localhost:27017/yelp-camp', {
     useNewUrlParser: true,
@@ -32,6 +32,8 @@ db.once("open", () => {
     console.log("Database connected");
 });
 
+/////DATABASE/////DATABASE/////DATABASE/////DATABASE/////DATABASE/////DATABASE
+
 app.engine('ejs', ejsMate);
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'))
@@ -42,12 +44,27 @@ app.use(morgan('dev'))
 app.use(session(sessionOption));
 app.use(flash())
 
+
+
 app.use((req, res, next) => {
     req.requestTime = Date.now();
     console.log(`req time is: ${req.requestTime}`)
     console.log(req.method, req.path);
     return next();
-})
+});
+
+/////ROUTES/////ROUTES/////ROUTES/////ROUTES/////ROUTES/////ROUTES////
+
+app.use('/campgrounds', campgrounds)
+
+
+
+
+
+
+/////ROUTES/////ROUTES/////ROUTES/////ROUTES/////ROUTES/////ROUTES////
+
+
 
 /////FLASH/////FLASH/////FLASH/////FLASH/////FLASH/////FLASH/////FLASH
 
@@ -57,17 +74,13 @@ app.use((req, res, next) => {
 })
 
 
-
-
-
-
-
-
-
-
-
 /////FLASH/////FLASH/////FLASH/////FLASH/////FLASH/////FLASH/////FLASH
 
+
+
+
+
+/////FUNCTIONS/////FUNCTIONS/////FUNCTIONS/////FUNCTIONS/////FUNCTIONS
 
 const verifyPassword = (req, res, next) => {
     const { password } = req.query
@@ -87,62 +100,13 @@ const validateCampground = (req, res, next) => {
     }
 }
 
-app.get('/', (req, res) => {
-    res.render('home')
-});
-
 function wrapAsync(fn) {
     return function (req, res, next) {
         fn(req, res, next).catch(e => next(e))
     }
 }
 
-app.get('/campgrounds', wrapAsync(async (req, res) => {
-    const campgrounds = await Campground.find({});
-    res.render('campgrounds/index', { campgrounds })
-}));
-
-app.get('/campgrounds/new', (req, res) => {
-    res.render('campgrounds/new');
-})
-
-app.post('/campgrounds', validateCampground, wrapAsync(async (req, res, next) => {
-    console.log(result);
-    const campground = new Campground(req.body.campground);
-    await campground.save();
-    res.redirect(`/campgrounds/${campground._id}`)
-}))
-
-app.get('/campgrounds/:id', wrapAsync(async (req, res, next) => {
-    const campground = await Campground.findById(req.params.id).populate('reviews');
-    if (!campground) {
-        return next(new AppError('Camground Not Found', 404))
-    }
-
-    res.render('campgrounds/show', { campground })
-}));
-
-app.get('/campgrounds/:id/edit', wrapAsync(async (req, res, next) => {
-    const campground = await Campground.findById(req.params.id)
-    res.render('campgrounds/edit', { campground });
-}));
-
-app.get('/secret', verifyPassword, (req, res) => {
-    res.send('This is my secret.')
-})
-
-app.put('/campgrounds/:id', validateCampground, wrapAsync(async (req, res, next) => {
-    const { id } = req.params;
-    const campground = await Campground.findByIdAndUpdate(id, { ...req.body.campground });
-    res.redirect(`/campgrounds/${campground._id}`)
-}));
-
-app.delete('/campgrounds/:id', wrapAsync(async (req, res, next) => {
-    const { id } = req.params;
-    const deleted = await Campground.findByIdAndDelete(id);
-    console.log(`${deleted.title} ${deleted.location}  is deleted.`)
-    res.redirect('/campgrounds');
-}))
+/////FUNCTIONS/////FUNCTIONS/////FUNCTIONS/////FUNCTIONS/////FUNCTIONS
 
 //////REVIEWS////////////REVIEWS////////////REVIEWS////////////
 
@@ -176,22 +140,14 @@ app.delete('/campgrounds/:id/reviews/:reviewId', wrapAsync(async (req, res, next
     res.redirect(`/campgrounds/${id}`)
 }))
 
-
-
-
-
-
-
-
-
 //////REVIEWS////////////REVIEWS////////////REVIEWS////////////
-app.get('/error', (req, res) => {
-    chicken.fly()
-})
+
 
 app.get('/dogs', (req, res) => {
     res.send('Whoof Whoof!')
 })
+
+/////ERROR/////ERROR/////ERROR/////ERROR/////ERROR/////ERROR/////ERROR/////ERROR
 
 app.get('/admin', (req, res) => {
     throw new AppError('You are not an Admin!', 403)
@@ -217,6 +173,11 @@ app.use((err, req, res, next) => {
     if (!err.message) err.message = 'Oh no, Something went wrong!'
     res.status(statusCode).render('error', { err })
 })
+
+/////ERROR/////ERROR/////ERROR/////ERROR/////ERROR/////ERROR/////ERROR/////ERROR
+
+
+
 
 app.listen(3000, () => {
     console.log('Serving on port 3000')

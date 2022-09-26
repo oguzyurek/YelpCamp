@@ -1,6 +1,10 @@
 const express = require('express');
 const app = express();
 const router = express.Router();
+const Campground = require('../models/campground');
+const Review = require('../models/review');
+const AppError = require('../utils/AppError');
+const ExpressError = require('../utils/ExpressError');
 
 
 const verifyPassword = (req, res, next) => {
@@ -21,9 +25,6 @@ const validateCampground = (req, res, next) => {
     }
 }
 
-router.get('/', (req, res) => {
-    res.render('home')
-});
 
 function wrapAsync(fn) {
     return function (req, res, next) {
@@ -31,23 +32,23 @@ function wrapAsync(fn) {
     }
 }
 
-router.get('/campgrounds', wrapAsync(async (req, res) => {
+router.get('/', wrapAsync(async (req, res) => {
     const campgrounds = await Campground.find({});
     res.render('campgrounds/index', { campgrounds })
 }));
 
-router.get('/campgrounds/new', (req, res) => {
+router.get('/new', (req, res) => {
     res.render('campgrounds/new');
 })
 
-router.post('/campgrounds', validateCampground, wrapAsync(async (req, res, next) => {
+router.post('/', validateCampground, wrapAsync(async (req, res, next) => {
     console.log(result);
     const campground = new Campground(req.body.campground);
     await campground.save();
     res.redirect(`/campgrounds/${campground._id}`)
 }))
 
-router.get('/campgrounds/:id', wrapAsync(async (req, res, next) => {
+router.get('/:id', wrapAsync(async (req, res, next) => {
     const campground = await Campground.findById(req.params.id).populate('reviews');
     if (!campground) {
         return next(new AppError('Camground Not Found', 404))
@@ -56,7 +57,7 @@ router.get('/campgrounds/:id', wrapAsync(async (req, res, next) => {
     res.render('campgrounds/show', { campground })
 }));
 
-router.get('/campgrounds/:id/edit', wrapAsync(async (req, res, next) => {
+router.get('/:id/edit', wrapAsync(async (req, res, next) => {
     const campground = await Campground.findById(req.params.id)
     res.render('campgrounds/edit', { campground });
 }));
@@ -65,13 +66,13 @@ router.get('/secret', verifyPassword, (req, res) => {
     res.send('This is my secret.')
 })
 
-router.put('/campgrounds/:id', validateCampground, wrapAsync(async (req, res, next) => {
+router.put('/:id', validateCampground, wrapAsync(async (req, res, next) => {
     const { id } = req.params;
     const campground = await Campground.findByIdAndUpdate(id, { ...req.body.campground });
     res.redirect(`/campgrounds/${campground._id}`)
 }));
 
-router.delete('/campgrounds/:id', wrapAsync(async (req, res, next) => {
+router.delete('/:id', wrapAsync(async (req, res, next) => {
     const { id } = req.params;
     const deleted = await Campground.findByIdAndDelete(id);
     console.log(`${deleted.title} ${deleted.location}  is deleted.`)
