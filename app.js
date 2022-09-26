@@ -18,7 +18,6 @@ mongoose.connect('mongodb://localhost:27017/yelp-camp', {
     useFindAndModify: false
 });
 
-
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error:"));
 db.once("open", () => {
@@ -75,3 +74,5 @@ app.use((err, req, res, next) => {
 app.listen(3000, () => {
     console.log('Serving on port 3000')
 })
+
+
