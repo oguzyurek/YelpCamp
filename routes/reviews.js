@@ -4,6 +4,7 @@ const router = express.Router();
 const { campgroundSchema, reviewSchema } = require('../schemas.js');
 const Campground = require('../models/campground');
 const Review = require('../models/review');
+const catchAsync = require('../utils/cacthAsync')
 const AppError = require('../utils/AppError');
 const ExpressError = require('../utils/ExpressError');
 
@@ -26,7 +27,7 @@ function wrapAsync(fn) {
 }
 
 
-app.post('/campgrounds/:id/reviews', validateReview, wrapAsync(async (req, res, next) => {
+router.post('/', validateReview, wrapAsync(async (req, res, next) => {
     const campground = await Campground.findById(req.params.id);
     const review = new Review(req.body.review);
     campground.reviews.push(review);
@@ -37,7 +38,7 @@ app.post('/campgrounds/:id/reviews', validateReview, wrapAsync(async (req, res, 
 
 }));
 
-app.delete('/campgrounds/:id/reviews/:reviewId', wrapAsync(async (req, res, next) => {
+router.delete('/:reviewId', wrapAsync(async (req, res, next) => {
     const { id, reviewId } = req.params;
     await Campground.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });
     await Review.findByIdAndDelete(reviewId);
