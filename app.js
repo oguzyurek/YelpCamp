@@ -82,23 +82,7 @@ app.use((req, res, next) => {
 
 /////FUNCTIONS/////FUNCTIONS/////FUNCTIONS/////FUNCTIONS/////FUNCTIONS
 
-const verifyPassword = (req, res, next) => {
-    const { password } = req.query
-    if (password === 'newyork') {
-        next()
-    }
-    throw new AppError('Password required!', 401)
-};
 
-const validateCampground = (req, res, next) => {
-    const { error } = campgroundSchema.validate(req.body);
-    if (error) {
-        const msg = error.details.map(el => el.message).join(`,`)
-        throw new ExpressError(msg, 400)
-    } else {
-        next();
-    }
-}
 
 function wrapAsync(fn) {
     return function (req, res, next) {
