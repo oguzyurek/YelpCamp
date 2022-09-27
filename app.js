@@ -16,6 +16,7 @@ const session = require('express-session');
 const sessionOption = { secret: 'thisisasecret', resave: false, saveUninitialized: false }
 const flash = require('connect-flash');
 const campgrounds = require('./routes/campgrounds')
+const reviews = require('./routes/reviews')
 
 
 /////DATABASE/////DATABASE/////DATABASE/////DATABASE/////DATABASE/////DATABASE
@@ -56,6 +57,7 @@ app.use((req, res, next) => {
 /////ROUTES/////ROUTES/////ROUTES/////ROUTES/////ROUTES/////ROUTES////
 
 app.use('/campgrounds', campgrounds)
+app.use('/campgrounds/:id/reviews', reviews)
 
 
 
@@ -93,36 +95,6 @@ function wrapAsync(fn) {
 /////FUNCTIONS/////FUNCTIONS/////FUNCTIONS/////FUNCTIONS/////FUNCTIONS
 
 //////REVIEWS////////////REVIEWS////////////REVIEWS////////////
-
-
-const validateReview = (req, res, next) => {
-    const { error } = reviewSchema.validate(req.body);
-    if (error) {
-        const msg = error.details.map(el => el.message).join(`,`)
-        throw new ExpressError(msg, 400)
-    } else {
-        next();
-    }
-}
-
-
-app.post('/campgrounds/:id/reviews', validateReview, wrapAsync(async (req, res, next) => {
-    const campground = await Campground.findById(req.params.id);
-    const review = new Review(req.body.review);
-    campground.reviews.push(review);
-    await review.save();
-    await campground.save();
-    req.flash('success', 'Successfully added a new comment.')
-    res.redirect(`/campgrounds/${campground._id}`)
-
-}));
-
-app.delete('/campgrounds/:id/reviews/:reviewId', wrapAsync(async (req, res, next) => {
-    const { id, reviewId } = req.params;
-    await Campground.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });
-    await Review.findByIdAndDelete(reviewId);
-    res.redirect(`/campgrounds/${id}`)
-}))
 
 //////REVIEWS////////////REVIEWS////////////REVIEWS////////////
 
