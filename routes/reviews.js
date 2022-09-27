@@ -1,9 +1,9 @@
 const express = require('express');
 const app = express();
-const router = express.Router();
-const { campgroundSchema, reviewSchema } = require('../schemas.js');
-const Campground = require('../models/campground');
+const router = express.Router({ mergeParams: true });
 const Review = require('../models/review');
+const { reviewSchema } = require('../schemas.js');
+const Campground = require('../models/campground');
 const catchAsync = require('../utils/cacthAsync')
 const AppError = require('../utils/AppError');
 const ExpressError = require('../utils/ExpressError');
