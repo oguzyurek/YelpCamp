@@ -1,1 +1,2 @@
-alert('Hello from the other side.')
+alert('Hello from the other side.');
+
