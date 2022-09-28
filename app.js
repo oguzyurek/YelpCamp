@@ -43,7 +43,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 app.use(morgan('dev'))
 app.use(session(sessionOption));
-app.use(flash())
+app.use(flash());
+app.use(express.static('public'));
 
 
 
