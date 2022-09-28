@@ -24,7 +24,8 @@ const reviews = require('./routes/reviews')
 mongoose.connect('mongodb://localhost:27017/yelp-camp', {
     useNewUrlParser: true,
     useCreateIndex: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    useFindAndModify: false
 });
 
 const db = mongoose.connection;
@@ -86,12 +87,12 @@ app.use((req, res, next) => {
 /////FUNCTIONS/////FUNCTIONS/////FUNCTIONS/////FUNCTIONS/////FUNCTIONS
 
 
-
-function wrapAsync(fn) {
-    return function (req, res, next) {
-        fn(req, res, next).catch(e => next(e))
-    }
-}
+// 09.29.22 deactivated
+// function wrapAsync(fn) {
+//     return function (req, res, next) {
+//         fn(req, res, next).catch(e => next(e))
+//     }
+// }
 
 /////FUNCTIONS/////FUNCTIONS/////FUNCTIONS/////FUNCTIONS/////FUNCTIONS
 
