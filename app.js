@@ -21,8 +21,6 @@ const sessionOption = {
         httpOnly: true,
         expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
         maxAge: 1000 * 60 * 60 * 24 * 7,
-
-
     }
 }
 const flash = require('connect-flash');
@@ -68,6 +66,12 @@ app.use((req, res, next) => {
 });
 
 /////ROUTES/////ROUTES/////ROUTES/////ROUTES/////ROUTES/////ROUTES////
+
+app.use((req, res, next) => {
+    res.locals.success = req.flash('success');
+    next()
+})
+
 
 app.use('/campgrounds', campgrounds)
 app.use('/campgrounds/:id/reviews', reviews)

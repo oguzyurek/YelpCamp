@@ -45,6 +45,7 @@ router.get('/new', (req, res) => {
 router.post('/', validateCampground, wrapAsync(async (req, res, next) => {
     const campground = new Campground(req.body.campground);
     await campground.save();
+    req.flash('success', 'New campground successfully created.');
     res.redirect(`/campgrounds/${campground._id}`)
 }))
 
@@ -53,8 +54,7 @@ router.get('/:id', wrapAsync(async (req, res, next) => {
     if (!campground) {
         return next(new AppError('Camground Not Found', 404))
     }
-
-    res.render('campgrounds/show', { campground })
+res.render('campgrounds/show', { campground })
 }));
 
 router.get('/:id/edit', wrapAsync(async (req, res, next) => {
