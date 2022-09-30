@@ -54,7 +54,7 @@ router.get('/:id', wrapAsync(async (req, res, next) => {
     if (!campground) {
         return next(new AppError('Camground Not Found', 404))
     }
-res.render('campgrounds/show', { campground })
+    res.render('campgrounds/show', { campground })
 }));
 
 router.get('/:id/edit', wrapAsync(async (req, res, next) => {
@@ -69,6 +69,7 @@ router.get('/secret', verifyPassword, (req, res) => {
 router.put('/:id', validateCampground, wrapAsync(async (req, res, next) => {
     const { id } = req.params;
     const campground = await Campground.findByIdAndUpdate(id, { ...req.body.campground });
+    req.flash('success', 'New campground successfully created.');
     res.redirect(`/campgrounds/${campground._id}`)
 }));
 
