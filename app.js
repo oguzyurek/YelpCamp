@@ -146,7 +146,6 @@ app.all('*', (req, res, next) => {
 app.use((err, req, res, next) => {
     const { statusCode = 500 } = err;
     if (!err.message) err.message = 'Oh no, Something went wrong!'
-    req.flash('error', `${err.message}`);
     res.redirect('/campgrounds');
 })
 

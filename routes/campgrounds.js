@@ -52,14 +52,22 @@ router.post('/', validateCampground, wrapAsync(async (req, res, next) => {
 router.get('/:id', wrapAsync(async (req, res, next) => {
     const campground = await Campground.findById(req.params.id).populate('reviews');
     if (!campground) {
-        return next(new AppError('Camground Not Found', 404))
+        req.flash('error', 'Can not find the Campground.')
+        return res.render('/campgrounds', { campground })
+
     }
     res.render('campgrounds/show', { campground })
 }));
 
 router.get('/:id/edit', wrapAsync(async (req, res, next) => {
     const campground = await Campground.findById(req.params.id)
-    res.render('campgrounds/edit', { campground });
+    if (!campground) {
+        req.flash('error', `Can not find the Campground.`);
+        return res.redirect('/campgrounds');
+    } else {
+        res.render('campgrounds/edit', { campground });
+    }
+
 }));
 
 router.get('/secret', verifyPassword, (req, res) => {
