@@ -69,7 +69,7 @@ router.get('/secret', verifyPassword, (req, res) => {
 router.put('/:id', validateCampground, wrapAsync(async (req, res, next) => {
     const { id } = req.params;
     const campground = await Campground.findByIdAndUpdate(id, { ...req.body.campground });
-    req.flash('success', '123.');
+    req.flash('success', `${campground.title} ${campground.location}  is edited.`);
     res.redirect(`/campgrounds/${campground._id}`)
 }));
 
@@ -77,7 +77,7 @@ router.delete('/:id', wrapAsync(async (req, res, next) => {
     const { id } = req.params;
     const deleted = await Campground.findByIdAndDelete(id);
     console.log(`${deleted.title} ${deleted.location}  is deleted.`)
-    req.flash('success', 'Deleted.');
+    req.flash('success', `${deleted.title} ${deleted.location}  is deleted.`);
     res.redirect('/campgrounds');
 }))
 
