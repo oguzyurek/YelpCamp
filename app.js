@@ -137,7 +137,7 @@ app.use((err, req, res, next) => {
     console.log(err.name);
     if (err.name === ' ValidationError') err = handleValidationErr(err);
     next(err);
-})
+});
 
 app.all('*', (req, res, next) => {
     next(new ExpressError('Page Not Found', 404));
