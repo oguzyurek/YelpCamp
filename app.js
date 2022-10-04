@@ -69,6 +69,7 @@ app.use((req, res, next) => {
 
 app.use((req, res, next) => {
     res.locals.success = req.flash('success');
+    res.locals.error = req.flash('error');
     next()
 })
 
@@ -89,6 +90,7 @@ app.use('/campgrounds/:id/reviews', reviews)
 
 app.use((req, res, next) => {
     res.locals.messages = req.flash('success');
+    res.locals.messages = req.flash('error');
     next();
 })
 
@@ -144,7 +146,8 @@ app.all('*', (req, res, next) => {
 app.use((err, req, res, next) => {
     const { statusCode = 500 } = err;
     if (!err.message) err.message = 'Oh no, Something went wrong!'
-    res.status(statusCode).render('error', { err })
+    req.flash('error', `${err.message}`);
+    res.redirect('/campgrounds');
 })
 
 /////ERROR/////ERROR/////ERROR/////ERROR/////ERROR/////ERROR/////ERROR/////ERROR
