@@ -24,8 +24,12 @@ const sessionOption = {
     }
 }
 const flash = require('connect-flash');
+const passport = require('passport');
+const LocalStrategy = require('passport-local');
+const User = require('./models/user');
 const campgrounds = require('./routes/campgrounds')
-const reviews = require('./routes/reviews')
+const reviews = require('./routes/reviews');
+const { deserialize } = require('v8');
 
 
 /////DATABASE/////DATABASE/////DATABASE/////DATABASE/////DATABASE/////DATABASE
@@ -55,7 +59,12 @@ app.use(morgan('dev'))
 app.use(session(sessionOption));
 app.use(flash());
 app.use(express.static('public'));
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
 
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 
 app.use((req, res, next) => {
@@ -73,49 +82,29 @@ app.use((req, res, next) => {
     next()
 })
 
+app.get('/fakeuser', async (req, res) => {
+    const user = new User({ email: 'oguz12@gmail.com', username: 'oguz12' })
+    const newUser12 = await User.register(user, 'oguz123');
+    res.send(newUser12);
+})
+
+
+
+
+
 
 app.use('/campgrounds', campgrounds)
 app.use('/campgrounds/:id/reviews', reviews)
 
-
-
-
-
-
 /////ROUTES/////ROUTES/////ROUTES/////ROUTES/////ROUTES/////ROUTES////
 
 
-
-/////FLASH/////FLASH/////FLASH/////FLASH/////FLASH/////FLASH/////FLASH
 
 app.use((req, res, next) => {
     res.locals.messages = req.flash('success');
     res.locals.messages = req.flash('error');
     next();
 })
-
-
-/////FLASH/////FLASH/////FLASH/////FLASH/////FLASH/////FLASH/////FLASH
-
-
-
-
-
-/////FUNCTIONS/////FUNCTIONS/////FUNCTIONS/////FUNCTIONS/////FUNCTIONS
-
-
-// 09.29.22 deactivated
-// function wrapAsync(fn) {
-//     return function (req, res, next) {
-//         fn(req, res, next).catch(e => next(e))
-//     }
-// }
-
-/////FUNCTIONS/////FUNCTIONS/////FUNCTIONS/////FUNCTIONS/////FUNCTIONS
-
-//////REVIEWS////////////REVIEWS////////////REVIEWS////////////
-
-//////REVIEWS////////////REVIEWS////////////REVIEWS////////////
 
 
 app.get('/dogs', (req, res) => {
