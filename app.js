@@ -26,9 +26,13 @@ const sessionOption = {
 const flash = require('connect-flash');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
-const User = require('./models/user');
-const campgrounds = require('./routes/campgrounds')
-const reviews = require('./routes/reviews');
+const User = require('./models/user')
+
+const userRoutes = require('./routes/users');
+const campgroundRoutes = require('./routes/campgrounds')
+const reviewRoutes = require('./routes/reviews');
+
+
 const { deserialize } = require('v8');
 
 
@@ -59,6 +63,7 @@ app.use(morgan('dev'))
 app.use(session(sessionOption));
 app.use(flash());
 app.use(express.static('public'));
+
 app.use(passport.initialize());
 app.use(passport.session());
 passport.use(new LocalStrategy(User.authenticate()));
@@ -93,8 +98,9 @@ app.get('/fakeuser', async (req, res) => {
 
 
 
-app.use('/campgrounds', campgrounds)
-app.use('/campgrounds/:id/reviews', reviews)
+app.use('/', userRoutes)
+app.use('/campgrounds', campgroundRoutes)
+app.use('/campgrounds/:id/reviews', reviewRoutes)
 
 /////ROUTES/////ROUTES/////ROUTES/////ROUTES/////ROUTES/////ROUTES////
 
