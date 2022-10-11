@@ -54,7 +54,6 @@ router.get('/:id', wrapAsync(async (req, res, next) => {
     if (!campground) {
         req.flash('error', 'Can not find the Campground.')
         return res.render('/campgrounds', { campground })
-
     }
     res.render('campgrounds/show', { campground })
 }));
