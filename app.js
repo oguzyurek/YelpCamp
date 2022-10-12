@@ -97,7 +97,7 @@ app.get('/fakeuser', async (req, res) => {
 
 
 
-app.use('/campgrounds', userRoutes)
+app.use('/', userRoutes)
 app.use('/campgrounds', campgroundRoutes)
 app.use('/campgrounds/:id/reviews', reviewRoutes)
 
