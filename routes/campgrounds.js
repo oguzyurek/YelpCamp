@@ -6,6 +6,7 @@ const Campground = require('../models/campground');
 const Review = require('../models/review');
 const AppError = require('../utils/AppError');
 const ExpressError = require('../utils/ExpressError');
+const { isLoggedIn } = require('../utils/middleware');
 
 
 const verifyPassword = (req, res, next) => {
@@ -38,14 +39,9 @@ router.get('/', wrapAsync(async (req, res) => {
     res.render('campgrounds/index', { campgrounds })
 }));
 
-router.get('/new', (req, res) => {
-    if (req.isAuthenticated()) {
-        res.render('campgrounds/new');
-    } else {
-        res.redirect('/signin')
-    }
-
-})
+router.get('/new', isLoggedIn, (req, res) => {
+    res.render('campgrounds/new')
+});
 
 router.post('/', validateCampground, wrapAsync(async (req, res, next) => {
     const campground = new Campground(req.body.campground);
@@ -63,7 +59,7 @@ router.get('/:id', wrapAsync(async (req, res, next) => {
     res.render('campgrounds/show', { campground })
 }));
 
-router.get('/:id/edit', wrapAsync(async (req, res, next) => {
+router.get('/:id/edit', isLoggedIn, wrapAsync(async (req, res, next) => {
     const campground = await Campground.findById(req.params.id)
     if (!campground) {
         req.flash('error', `Can not find the Campground.`);
@@ -85,7 +81,7 @@ router.put('/:id', validateCampground, wrapAsync(async (req, res, next) => {
     res.redirect(`/campgrounds/${campground._id}`)
 }));
 
-router.delete('/:id', wrapAsync(async (req, res, next) => {
+router.delete('/:id', isLoggedIn, wrapAsync(async (req, res, next) => {
     const { id } = req.params;
     const deleted = await Campground.findByIdAndDelete(id);
     console.log(`${deleted.title} ${deleted.location}  is deleted.`)
