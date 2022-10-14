@@ -31,4 +31,25 @@ router.post('/signin', passport.authenticate('local', { failureFlash: true, fail
 })
 
 
+// DOES NOT WORK IN NEW VERSION.
+// router.get('/logout', (req, res, next) => {
+//     req.logOut();
+//     req.flash('success', 'You successfully logged out. Good bye!')
+//     res.redirect('/campgrounds')
+// });
+
+router.get('/logout', (req, res, next) => {
+    req.logout(function (err) {
+        if (err) { return next(err); };
+        req.flash('success', "Goodbye!");
+        res.redirect('/campgrounds');
+    });
+});
+
+router.get('/asd', (req, res) => {
+    req.flash('success', 'heyyyy');
+    res.render('/campgrounds')
+})
+
+
 module.exports = router;

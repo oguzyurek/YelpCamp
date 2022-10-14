@@ -71,20 +71,27 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 
-app.use((req, res, next) => {
-    req.requestTime = Date.now();
-    console.log(`req time is: ${req.requestTime}`)
-    console.log(req.method, req.path);
-    return next();
-});
+// app.use((req, res, next) => {
+//     req.requestTime = Date.now();
+//     console.log(`req time is: ${req.requestTime}`)
+//     console.log(req.method, req.path);
+//     return next();
+// });
 
 /////ROUTES/////ROUTES/////ROUTES/////ROUTES/////ROUTES/////ROUTES////
 
 app.use((req, res, next) => {
+    res.locals.currentUser = req.user;
     res.locals.success = req.flash('success');
     res.locals.error = req.flash('error');
     next()
-})
+});
+
+// app.use((req, res, next) => {
+//     res.locals.messages = req.flash('success');
+//     res.locals.messages = req.flash('error');
+//     next();
+// })
 
 app.get('/fakeuser', async (req, res) => {
     const user = new User({ email: 'oguz12@gmail.com', username: 'oguz12' })
@@ -105,11 +112,7 @@ app.use('/campgrounds/:id/reviews', reviewRoutes)
 
 
 
-app.use((req, res, next) => {
-    res.locals.messages = req.flash('success');
-    res.locals.messages = req.flash('error');
-    next();
-})
+
 
 
 app.get('/dogs', (req, res) => {

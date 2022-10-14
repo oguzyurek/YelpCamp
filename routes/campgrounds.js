@@ -43,7 +43,7 @@ router.get('/new', isLoggedIn, (req, res) => {
     res.render('campgrounds/new')
 });
 
-router.post('/', validateCampground, wrapAsync(async (req, res, next) => {
+router.post('/', isLoggedIn, validateCampground, wrapAsync(async (req, res, next) => {
     const campground = new Campground(req.body.campground);
     await campground.save();
     req.flash('success', 'New campground successfully created.');
