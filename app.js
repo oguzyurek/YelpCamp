@@ -31,6 +31,7 @@ const User = require('./models/user')
 const userRoutes = require('./routes/users');
 const campgroundRoutes = require('./routes/campgrounds')
 const reviewRoutes = require('./routes/reviews');
+const user = require('./models/user');
 
 
 
@@ -81,7 +82,7 @@ passport.deserializeUser(User.deserializeUser());
 /////ROUTES/////ROUTES/////ROUTES/////ROUTES/////ROUTES/////ROUTES////
 
 app.use((req, res, next) => {
-    console.log(req.session);
+    console.log(user)
     res.locals.currentUser = req.user; // you can reach to currentUser in all the pages.
     res.locals.success = req.flash('success');
     res.locals.error = req.flash('error');
