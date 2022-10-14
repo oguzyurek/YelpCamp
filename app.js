@@ -81,10 +81,10 @@ passport.deserializeUser(User.deserializeUser());
 /////ROUTES/////ROUTES/////ROUTES/////ROUTES/////ROUTES/////ROUTES////
 
 app.use((req, res, next) => {
-    res.locals.currentUser = req.user;
+    res.locals.currentUser = req.user; // you can reach to currentUser in all the pages.
     res.locals.success = req.flash('success');
     res.locals.error = req.flash('error');
-    next()
+    next();
 });
 
 // app.use((req, res, next) => {
