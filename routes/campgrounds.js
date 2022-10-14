@@ -39,7 +39,12 @@ router.get('/', wrapAsync(async (req, res) => {
 }));
 
 router.get('/new', (req, res) => {
-    res.render('campgrounds/new');
+    if (req.isAuthenticated()) {
+        res.render('campgrounds/new');
+    } else {
+        res.redirect('/signin')
+    }
+
 })
 
 router.post('/', validateCampground, wrapAsync(async (req, res, next) => {
