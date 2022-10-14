@@ -32,7 +32,7 @@ function wrapAsync(fn) {
     return function (req, res, next) {
         fn(req, res, next).catch(e => next(e))
     }
-}
+};
 
 router.get('/', wrapAsync(async (req, res) => {
     const campgrounds = await Campground.find({});
@@ -49,7 +49,7 @@ router.post('/', isLoggedIn, validateCampground, wrapAsync(async (req, res, next
     await campground.save();
     req.flash('success', 'New campground successfully created.');
     res.redirect(`/campgrounds/${campground._id}`)
-}))
+}));
 
 router.get('/:id', wrapAsync(async (req, res, next) => {
     const campground = await Campground.findById(req.params.id).populate('reviews').populate('author');
@@ -73,7 +73,7 @@ router.get('/:id/edit', isLoggedIn, wrapAsync(async (req, res, next) => {
 
 router.get('/secret', verifyPassword, (req, res) => {
     res.send('This is my secret.')
-})
+});
 
 router.put('/:id', validateCampground, wrapAsync(async (req, res, next) => {
     const { id } = req.params;
@@ -88,6 +88,6 @@ router.delete('/:id', isLoggedIn, wrapAsync(async (req, res, next) => {
     console.log(`${deleted.title} ${deleted.location}  is deleted.`)
     req.flash('success', `${deleted.title} ${deleted.location}  is deleted.`);
     res.redirect('/campgrounds');
-}))
+}));
 
 module.exports = router;
