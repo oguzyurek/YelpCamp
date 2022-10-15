@@ -7,6 +7,7 @@ const Review = require('../models/review');
 const AppError = require('../utils/AppError');
 const ExpressError = require('../utils/ExpressError');
 const { isLoggedIn } = require('../utils/middleware');
+const campground = require('../models/campground');
 
 
 const verifyPassword = (req, res, next) => {
@@ -75,11 +76,18 @@ router.get('/secret', verifyPassword, (req, res) => {
     res.send('This is my secret.')
 });
 
-router.put('/:id', validateCampground, wrapAsync(async (req, res, next) => {
+router.put('/:id', isLoggedIn, validateCampground, wrapAsync(async (req, res, next) => {
     const { id } = req.params;
-    const campground = await Campground.findByIdAndUpdate(id, { ...req.body.campground });
+    campground = await Campground.findById(id);
+    if (!campground.author.equals(req.user._id)) {
+        req.flash('error', `You need permission.`);
+        return res.redirect(`/campgrounds/${campground._id}`)
+    } const camp = await Campground.findByIdAndUpdate(id, { ...req.body.campground });
     req.flash('success', `${campground.title} ${campground.location}  is edited.`);
     res.redirect(`/campgrounds/${campground._id}`)
+
+    // const campground = await Campground.findByIdAndUpdate(id, { ...req.body.campground });
+
 }));
 
 router.delete('/:id', isLoggedIn, wrapAsync(async (req, res, next) => {
