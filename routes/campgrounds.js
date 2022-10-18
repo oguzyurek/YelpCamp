@@ -28,6 +28,16 @@ const validateCampground = (req, res, next) => {
     }
 }
 
+const isAuthor = async (req, res, next) => {
+    const { id } = req.params;
+    const campground = await Campground.findById(id);
+    if (!campground.author.equals(req.user._id)) {
+        req.flash('error', `You need permission.`);
+        return res.redirect(`/campgrounds/${campground._id}`)
+    }
+    next();
+}
+
 
 function wrapAsync(fn) {
     return function (req, res, next) {
@@ -43,6 +53,8 @@ router.get('/', wrapAsync(async (req, res) => {
 router.get('/new', isLoggedIn, (req, res) => {
     res.render('campgrounds/new')
 });
+
+
 
 router.post('/', isLoggedIn, validateCampground, wrapAsync(async (req, res, next) => {
     const campground = new Campground(req.body.campground);
@@ -61,7 +73,7 @@ router.get('/:id', wrapAsync(async (req, res, next) => {
     res.render('campgrounds/show', { campground })
 }));
 
-router.get('/:id/edit', isLoggedIn, wrapAsync(async (req, res, next) => {
+router.get('/:id/edit', isLoggedIn, isAuthor, wrapAsync(async (req, res, next) => {
     const campground = await Campground.findById(req.params.id)
     if (!campground) {
         req.flash('error', `Can not find the Campground.`);
@@ -76,14 +88,9 @@ router.get('/secret', verifyPassword, (req, res) => {
     res.send('This is my secret.')
 });
 
-router.put('/:id', isLoggedIn, validateCampground, wrapAsync(async (req, res, next) => {
+router.put('/:id', isLoggedIn, isAuthor, validateCampground, wrapAsync(async (req, res, next) => {
     const { id } = req.params;
-    const campground = await Campground.findById(id);
-    if (!campground.author.equals(req.user._id)) {
-        req.flash('error', `You need permission.`);
-        return res.redirect(`/campgrounds/${campground._id}`)
-    }
-    const camp = await Campground.findByIdAndUpdate(id, { ...req.body.campground });
+    const campground = await Campground.findByIdAndUpdate(id, { ...req.body.campground });
     req.flash('success', `${campground.title} ${campground.location}  is edited.`);
     res.redirect(`/campgrounds/${campground._id}`)
 
@@ -91,13 +98,8 @@ router.put('/:id', isLoggedIn, validateCampground, wrapAsync(async (req, res, ne
 
 }));
 
-router.delete('/:id', isLoggedIn, wrapAsync(async (req, res, next) => {
+router.delete('/:id', isLoggedIn, isAuthor, wrapAsync(async (req, res, next) => {
     const { id } = req.params;
-    const campground = await Campground.findById(id);
-    if (!campground.author.equals(req.user._id)) {
-        req.flash('error', `You need permission.`);
-        return res.redirect(`/campgrounds/${campground._id}`)
-    }
     const deleted = await Campground.findByIdAndDelete(id);
     console.log(`${deleted.title} ${deleted.location}  is deleted.`)
     req.flash('success', `${deleted.title} ${deleted.location}  is deleted.`);
@@ -105,3 +107,6 @@ router.delete('/:id', isLoggedIn, wrapAsync(async (req, res, next) => {
 }));
 
 module.exports = router;
+
+
+
