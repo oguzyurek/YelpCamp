@@ -93,6 +93,11 @@ router.put('/:id', isLoggedIn, validateCampground, wrapAsync(async (req, res, ne
 
 router.delete('/:id', isLoggedIn, wrapAsync(async (req, res, next) => {
     const { id } = req.params;
+    const campground = await Campground.findById(id);
+    if (!campground.author.equals(req.user._id)) {
+        req.flash('error', `You need permission.`);
+        return res.redirect(`/campgrounds/${campground._id}`)
+    }
     const deleted = await Campground.findByIdAndDelete(id);
     console.log(`${deleted.title} ${deleted.location}  is deleted.`)
     req.flash('success', `${deleted.title} ${deleted.location}  is deleted.`);
