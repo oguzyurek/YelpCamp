@@ -78,11 +78,12 @@ router.get('/secret', verifyPassword, (req, res) => {
 
 router.put('/:id', isLoggedIn, validateCampground, wrapAsync(async (req, res, next) => {
     const { id } = req.params;
-    campground = await Campground.findById(id);
+    const campground = await Campground.findById(id);
     if (!campground.author.equals(req.user._id)) {
         req.flash('error', `You need permission.`);
         return res.redirect(`/campgrounds/${campground._id}`)
-    } const camp = await Campground.findByIdAndUpdate(id, { ...req.body.campground });
+    }
+    const camp = await Campground.findByIdAndUpdate(id, { ...req.body.campground });
     req.flash('success', `${campground.title} ${campground.location}  is edited.`);
     res.redirect(`/campgrounds/${campground._id}`)
 
