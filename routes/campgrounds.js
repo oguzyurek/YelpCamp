@@ -45,6 +45,7 @@ router.get('/:id/edit', isAuthor, isLoggedIn, cacthAsync(async (req, res, next) 
         req.flash('error', `Can not find the Campground.`);
         return res.redirect('/campgrounds');
     }
+   
     res.render('campgrounds/edit', { campground });
 }));
 
