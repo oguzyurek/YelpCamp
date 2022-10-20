@@ -6,46 +6,12 @@ const Campground = require('../models/campground');
 const Review = require('../models/review');
 const AppError = require('../utils/AppError');
 const ExpressError = require('../utils/ExpressError');
-const { isLoggedIn } = require('../utils/middleware');
+const { isLoggedIn, isAuthor, validateCampground } = require('../utils/middleware');
 const campground = require('../models/campground');
+const cacthAsync = require('../utils/cacthAsync.js');
 
 
-const verifyPassword = (req, res, next) => {
-    const { password } = req.query
-    if (password === 'newyork') {
-        next()
-    }
-    throw new AppError('Password required!', 401)
-};
-
-const validateCampground = (req, res, next) => {
-    const { error } = campgroundSchema.validate(req.body);
-    if (error) {
-        const msg = error.details.map(el => el.message).join(`,`)
-        throw new ExpressError(msg, 400)
-    } else {
-        next();
-    }
-}
-
-const isAuthor = async (req, res, next) => {
-    const { id } = req.params;
-    const campground = await Campground.findById(id);
-    if (!campground.author.equals(req.user._id)) {
-        req.flash('error', `You need permission.`);
-        return res.redirect(`/campgrounds/${campground._id}`)
-    }
-    next();
-}
-
-
-function wrapAsync(fn) {
-    return function (req, res, next) {
-        fn(req, res, next).catch(e => next(e))
-    }
-};
-
-router.get('/', wrapAsync(async (req, res) => {
+router.get('/', cacthAsync(async (req, res) => {
     const campgrounds = await Campground.find({});
     res.render('campgrounds/index', { campgrounds })
 }));
@@ -56,7 +22,7 @@ router.get('/new', isLoggedIn, (req, res) => {
 
 
 
-router.post('/', isLoggedIn, validateCampground, wrapAsync(async (req, res, next) => {
+router.post('/', isLoggedIn, validateCampground, cacthAsync(async (req, res, next) => {
     const campground = new Campground(req.body.campground);
     campground.author = req.user._id;
     await campground.save();
@@ -64,7 +30,7 @@ router.post('/', isLoggedIn, validateCampground, wrapAsync(async (req, res, next
     res.redirect(`/campgrounds/${campground._id}`)
 }));
 
-router.get('/:id', wrapAsync(async (req, res, next) => {
+router.get('/:id', cacthAsync(async (req, res, next) => {
     const campground = await Campground.findById(req.params.id).populate('reviews').populate('author');
     if (!campground) {
         req.flash('error', 'Can not find the Campground.')
@@ -73,22 +39,18 @@ router.get('/:id', wrapAsync(async (req, res, next) => {
     res.render('campgrounds/show', { campground })
 }));
 
-router.get('/:id/edit', isLoggedIn, isAuthor, wrapAsync(async (req, res, next) => {
+router.get('/:id/edit', isAuthor, isLoggedIn, cacthAsync(async (req, res, next) => {
     const campground = await Campground.findById(req.params.id)
     if (!campground) {
         req.flash('error', `Can not find the Campground.`);
         return res.redirect('/campgrounds');
-    } else {
-        res.render('campgrounds/edit', { campground });
     }
-
+    res.render('campgrounds/edit', { campground });
 }));
 
-router.get('/secret', verifyPassword, (req, res) => {
-    res.send('This is my secret.')
-});
 
-router.put('/:id', isLoggedIn, isAuthor, validateCampground, wrapAsync(async (req, res, next) => {
+
+router.put('/:id', isLoggedIn, isAuthor, validateCampground, cacthAsync(async (req, res, next) => {
     const { id } = req.params;
     const campground = await Campground.findByIdAndUpdate(id, { ...req.body.campground });
     req.flash('success', `${campground.title} ${campground.location}  is edited.`);
@@ -98,7 +60,7 @@ router.put('/:id', isLoggedIn, isAuthor, validateCampground, wrapAsync(async (re
 
 }));
 
-router.delete('/:id', isLoggedIn, isAuthor, wrapAsync(async (req, res, next) => {
+router.delete('/:id', isLoggedIn, isAuthor, cacthAsync(async (req, res, next) => {
     const { id } = req.params;
     const deleted = await Campground.findByIdAndDelete(id);
     console.log(`${deleted.title} ${deleted.location}  is deleted.`)
@@ -107,6 +69,4 @@ router.delete('/:id', isLoggedIn, isAuthor, wrapAsync(async (req, res, next) => 
 }));
 
 module.exports = router;
-
-
 
