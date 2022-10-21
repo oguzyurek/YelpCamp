@@ -31,7 +31,12 @@ router.post('/', isLoggedIn, validateCampground, cacthAsync(async (req, res, nex
 }));
 
 router.get('/:id', cacthAsync(async (req, res, next) => {
-    const campground = await Campground.findById(req.params.id).populate('reviews').populate('author');
+    const campground = await Campground.findById(req.params.id).populate({
+        path: 'reviews',
+        populate: {
+            path: 'author'
+        }
+    }).populate('author');
     if (!campground) {
         req.flash('error', 'Can not find the Campground.')
         return res.render('/campgrounds', { campground })
@@ -45,7 +50,7 @@ router.get('/:id/edit', isAuthor, isLoggedIn, cacthAsync(async (req, res, next) 
         req.flash('error', `Can not find the Campground.`);
         return res.redirect('/campgrounds');
     }
-   
+
     res.render('campgrounds/edit', { campground });
 }));
 
