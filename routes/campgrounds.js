@@ -9,20 +9,21 @@ const ExpressError = require('../utils/ExpressError');
 const { isLoggedIn, isAuthor, validateCampground } = require('../utils/middleware');
 const campground = require('../models/campground');
 const campgrounds = require('../controllers/campgrounds');
-const cacthAsync = require('../utils/cacthAsync.js');
-
-router.route('/')
-    .get(cacthAsync(campgrounds.index))
-    .post(isLoggedIn, validateCampground, cacthAsync(campgrounds.postNewCampground));
-
-router.route('/:id')
-    .get(cacthAsync(campgrounds.renderCampground))
-    .put(isLoggedIn, isAuthor, validateCampground, cacthAsync(campgrounds.postEditPage))
-    .delete(isLoggedIn, isAuthor, cacthAsync(campgrounds.deleteCampground))
+const catchAsync = require('../utils/catchAsync');
 
 router.get('/new', isLoggedIn, campgrounds.renderNewPage);
 
-router.get('/:id/edit', isAuthor, isLoggedIn, cacthAsync(campgrounds.renderEditPage));
+router.route('/')
+    .get(catchAsync(campgrounds.index))
+    .post(isLoggedIn, validateCampground, catchAsync(campgrounds.postNewCampground));
+
+
+router.route('/:id')
+    .get(catchAsync(campgrounds.renderCampground))
+    .put(isLoggedIn, isAuthor, validateCampground, catchAsync(campgrounds.postEditPage))
+    .delete(isLoggedIn, isAuthor, catchAsync(campgrounds.deleteCampground))
+
+router.get('/:id/edit', isAuthor, isLoggedIn, catchAsync(campgrounds.renderEditPage));
 
 module.exports = router;
 

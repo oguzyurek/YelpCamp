@@ -1,13 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const passport = require('passport');
-const cacthAsync = require('../utils/cacthAsync');
+const catchAsync = require('../utils/catchAsync');
 const users = require('../controllers/users')
 const User = require('../models/user');
 
 router.route('/register')
     .get(users.renderRegisterPage)
-    .post(cacthAsync(users.postRegisterPage))
+    .post(catchAsync(users.postRegisterPage))
 
 router.route('/signin')
     .get(users.renderSignin)
