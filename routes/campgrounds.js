@@ -16,15 +16,11 @@ router.get('/', cacthAsync(campgrounds.index));
 
 router.get('/new', isLoggedIn, campgrounds.renderNewPage);
 
-
-
 router.post('/', isLoggedIn, validateCampground, cacthAsync(campgrounds.postNewCampground));
 
 router.get('/:id', cacthAsync(campgrounds.renderCampground));
 
 router.get('/:id/edit', isAuthor, isLoggedIn, cacthAsync(campgrounds.renderEditPage));
-
-
 
 router.put('/:id', isLoggedIn, isAuthor, validateCampground, cacthAsync(campgrounds.postEditPage));
 
