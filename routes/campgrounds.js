@@ -28,13 +28,7 @@ router.get('/:id/edit', isAuthor, isLoggedIn, cacthAsync(campgrounds.renderEditP
 
 router.put('/:id', isLoggedIn, isAuthor, validateCampground, cacthAsync(campgrounds.postEditPage));
 
-router.delete('/:id', isLoggedIn, isAuthor, cacthAsync(async (req, res, next) => {
-    const { id } = req.params;
-    const deleted = await Campground.findByIdAndDelete(id);
-    console.log(`${deleted.title} ${deleted.location}  is deleted.`)
-    req.flash('success', `${deleted.title} ${deleted.location}  is deleted.`);
-    res.redirect('/campgrounds');
-}));
+router.delete('/:id', isLoggedIn, isAuthor, cacthAsync(campgrounds.deleteCampground));
 
 module.exports = router;
 
