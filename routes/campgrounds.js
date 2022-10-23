@@ -14,33 +14,13 @@ const cacthAsync = require('../utils/cacthAsync.js');
 
 router.get('/', cacthAsync(campgrounds.index));
 
-router.get('/new', isLoggedIn, (req, res) => {
-    res.render('campgrounds/new')
-});
+router.get('/new', isLoggedIn, campgrounds.renderNewForm);
 
 
 
-router.post('/', isLoggedIn, validateCampground, cacthAsync(async (req, res, next) => {
-    const campground = new Campground(req.body.campground);
-    campground.author = req.user._id;
-    await campground.save();
-    req.flash('success', 'New campground successfully created.');
-    res.redirect(`/campgrounds/${campground._id}`)
-}));
+router.post('/', isLoggedIn, validateCampground, cacthAsync(campground.post));
 
-router.get('/:id', cacthAsync(async (req, res, next) => {
-    const campground = await Campground.findById(req.params.id).populate({
-        path: 'reviews',
-        populate: {
-            path: 'author'
-        }
-    }).populate('author');
-    if (!campground) {
-        req.flash('error', 'Can not find the Campground.')
-        return res.render('/campgrounds', { campground })
-    }
-    res.render('campgrounds/show', { campground })
-}));
+router.get('/:id', cacthAsync(campground.show));
 
 router.get('/:id/edit', isAuthor, isLoggedIn, cacthAsync(async (req, res, next) => {
     const campground = await Campground.findById(req.params.id)
