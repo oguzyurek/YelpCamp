@@ -7,42 +7,26 @@ const Review = require('../models/review');
 const AppError = require('../utils/AppError');
 const ExpressError = require('../utils/ExpressError');
 const { isLoggedIn, isAuthor, validateCampground } = require('../utils/middleware');
-const campgrounds = require('../controllers/campgrounds')
 const campground = require('../models/campground');
+const campgrounds = require('../controllers/campgrounds');
 const cacthAsync = require('../utils/cacthAsync.js');
 
 
 router.get('/', cacthAsync(campgrounds.index));
 
-router.get('/new', isLoggedIn, campgrounds.renderNewForm);
+router.get('/new', isLoggedIn, campgrounds.renderNewPage);
 
 
 
-router.post('/', isLoggedIn, validateCampground, cacthAsync(campground.post));
+router.post('/', isLoggedIn, validateCampground, cacthAsync(campgrounds.postNewCampground));
 
-router.get('/:id', cacthAsync(campground.show));
+router.get('/:id', cacthAsync(campgrounds.renderCampground));
 
-router.get('/:id/edit', isAuthor, isLoggedIn, cacthAsync(async (req, res, next) => {
-    const campground = await Campground.findById(req.params.id)
-    if (!campground) {
-        req.flash('error', `Can not find the Campground.`);
-        return res.redirect('/campgrounds');
-    }
-
-    res.render('campgrounds/edit', { campground });
-}));
+router.get('/:id/edit', isAuthor, isLoggedIn, cacthAsync(campgrounds.renderEditPage));
 
 
 
-router.put('/:id', isLoggedIn, isAuthor, validateCampground, cacthAsync(async (req, res, next) => {
-    const { id } = req.params;
-    const campground = await Campground.findByIdAndUpdate(id, { ...req.body.campground });
-    req.flash('success', `${campground.title} ${campground.location}  is edited.`);
-    res.redirect(`/campgrounds/${campground._id}`)
-
-    // const campground = await Campground.findByIdAndUpdate(id, { ...req.body.campground });
-
-}));
+router.put('/:id', isLoggedIn, isAuthor, validateCampground, cacthAsync(campgrounds.postEditPage));
 
 router.delete('/:id', isLoggedIn, isAuthor, cacthAsync(async (req, res, next) => {
     const { id } = req.params;
