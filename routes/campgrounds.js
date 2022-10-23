@@ -7,14 +7,12 @@ const Review = require('../models/review');
 const AppError = require('../utils/AppError');
 const ExpressError = require('../utils/ExpressError');
 const { isLoggedIn, isAuthor, validateCampground } = require('../utils/middleware');
+const campgrounds = require('../controllers/campgrounds')
 const campground = require('../models/campground');
 const cacthAsync = require('../utils/cacthAsync.js');
 
 
-router.get('/', cacthAsync(async (req, res) => {
-    const campgrounds = await Campground.find({});
-    res.render('campgrounds/index', { campgrounds })
-}));
+router.get('/', cacthAsync(campgrounds.index));
 
 router.get('/new', isLoggedIn, (req, res) => {
     res.render('campgrounds/new')
