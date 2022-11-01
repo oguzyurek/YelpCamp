@@ -16,7 +16,7 @@ router.route('/')
     .get(catchAsync(campgrounds.index))
     // .post(isLoggedIn, validateCampground, catchAsync(campgrounds.postNewCampground));
     .post(upload.single('image'), (req, res) => {
-        res.send(req.body)
+        console.log(req.body, req.files)
     })
 
 router.route('/:id')
