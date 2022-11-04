@@ -8,8 +8,8 @@ const campground = require('../models/campground');
 const campgrounds = require('../controllers/campgrounds');
 const catchAsync = require('../utils/catchAsync');
 const multer = require('multer');
-const { storage } = require('../cloudinary')
-const upload = multer(storage)
+const { storage } = require('../cloudinary');
+const upload = multer({ storage });
 
 router.get('/new', isLoggedIn, campgrounds.renderNewPage);
 

@@ -3,6 +3,8 @@ const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const express = require('express');
 const multer = require('multer');
 
+
+
 const app = express();
 
 cloudinary.config({
@@ -16,20 +18,15 @@ cloudinary.config({
 
 
 const storage = new CloudinaryStorage({
-    cloudinary: cloudinary,
+    cloudinary,
     params: {
         folder: 'YelpCamp',
-        format: async (req, file) => ['png', 'jpeg', 'jpg'] // supports promises as well
+        allowedFormats: ['jpeg', 'png', 'jpg']
     },
-});
-
-const parser = multer({ storage: storage });
-
-app.post('/upload', parser.single('image'), function (req, res) {
-    res.json(req.file);
 });
 
 module.exports = {
     cloudinary,
     storage
 }
+
