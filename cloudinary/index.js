@@ -18,8 +18,8 @@ cloudinary.config({
 const storage = new CloudinaryStorage({
     cloudinary: cloudinary,
     params: {
-        folder: 'some-folder-name',
-        format: async (req, file) => 'png', // supports promises as well
+        folder: 'YelpCamp',
+        format: async (req, file) => ['png', 'jpeg', 'jpg'] // supports promises as well
         public_id: (req, file) => 'computed-filename-using-request',
     },
 });
@@ -29,3 +29,8 @@ const parser = multer({ storage: storage });
 app.post('/upload', parser.single('image'), function (req, res) {
     res.json(req.file);
 });
+
+module.exports = {
+    cloudinary,
+    storage
+}
