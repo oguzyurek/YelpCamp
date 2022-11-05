@@ -15,8 +15,7 @@ router.get('/new', isLoggedIn, campgrounds.renderNewPage);
 
 router.route('/')
     .get(catchAsync(campgrounds.index))
-    .post(isLoggedIn, validateCampground, upload.array('image'), catchAsync(campgrounds.postNewCampground));
-
+    .post(isLoggedIn, upload.array('image'), validateCampground, catchAsync(campgrounds.postNewCampground));
 
 router.route('/:id')
     .get(catchAsync(campgrounds.renderCampground))
