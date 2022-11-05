@@ -3,15 +3,33 @@
     <div class="container mt-4 mb-4">
         <div class="modal-body row">
             <div class="col-md-6 ">
-                <% for (let img of campground.images) {%>
-                    <img src="<%= img.url %>" class="rounded-4 img-fluid" alt="..." alt="">
-                    <% } %>
+                <!--  -->
+
+
+                <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+                    <div class="carousel-inner">
+                        <% for (let img of campground.images) {%>
+                            <div class="carousel-item active">
+                                <img class="d-block w-100" src="<%= img.url %>" alt="First slide">
+                            </div>
+                            <% } %>
+                    </div>
+                    <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </div>
 
 
 
-                        <p class=" d-flex p-2 ">
-                            Added by <%= campground.author.username %>
-                        </p>
+
+                <p class=" d-flex p-2 ">
+                    Added by <%= campground.author.username %>
+                </p>
             </div>
 
             <div class="col-md-6 ">
