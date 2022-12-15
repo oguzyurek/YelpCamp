@@ -18,7 +18,7 @@
                             value="<%= campground.location%>" required>
                         <div class="valid-feedback">Looks good!</div>
                     </div>
-                    <div class="col-sm-3 my-1">
+                    <div class="col-sm-6 my-1">
                         <label class="sr-only" for="price">Price</label>
                         <div class="input-group">
                             <div class="input-group-prepend">
@@ -50,11 +50,11 @@
                     <div class="mb-3">
                         <% campground.images.forEach(function(img, i) { %>
                             <img src="<%=img.thumbnail %>" class="img-thumbnail" alt="">
-                            <div class="form-check inline">
+                            
                                 <input type="checkbox" id="image-<%=i%>" name="deleteImages[]"
                                     value="<%=img.filename%>">
-                                <label for="image-<%=i%>">Delete This Image</label>
-                            </div>
+                                <label for="image-<%=i%>">Delete?</label>
+                            
 
                             <% })%>
                     </div>
