@@ -28,12 +28,22 @@
                             <div class="valid-feedback">Looks good!</div>
                         </div>
                     </div>
-                    <input type="file" name="image" id="" multiple>
+                    <!-- <input type="file" name="image" id="" multiple> -->
                     <!-- <div class="mb-3">
                         <label class="form-label" for="image">Image Url</label>
                         <input class="form-control" type="text" id="image" name="campground[image]" required>
                         <div class="valid-feedback">Looks good!</div>
                     </div> -->
+                    <div><label for="image">Add Images</label></div>
+                    <div class="input-group mb-3">
+
+                        <input type="file" name="image" id="image" class="form-control" placeholder="Images"
+                            aria-label="Images" aria-describedby="basic-addon2" multiple>
+                    </div>
+
+
+
+
                     <div class="mb-3">
                         <label class="form-label" for="description">Description</label>
                         <input class="form-control" type="text" id="description" name="campground[description]"
