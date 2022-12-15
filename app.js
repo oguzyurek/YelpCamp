@@ -84,7 +84,6 @@ passport.deserializeUser(User.deserializeUser());
 /////ROUTES/////ROUTES/////ROUTES/////ROUTES/////ROUTES/////ROUTES////
 
 app.use((req, res, next) => {
-    console.log(user)
     res.locals.currentUser = req.user; // you can reach to currentUser in all the pages.
     res.locals.success = req.flash('success');
     res.locals.error = req.flash('error');
@@ -117,17 +116,9 @@ app.use('/campgrounds/:id/reviews', reviewRoutes)
 
 
 
-
-
-app.get('/dogs', (req, res) => {
-    res.send('Whoof Whoof!')
-})
-
 /////ERROR/////ERROR/////ERROR/////ERROR/////ERROR/////ERROR/////ERROR/////ERROR
 
-app.get('/admin', (req, res) => {
-    throw new AppError('You are not an Admin!', 403)
-})
+
 
 const handleValidationErr = err => {
     console.dir(err);
