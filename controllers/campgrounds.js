@@ -15,11 +15,11 @@ module.exports.renderNewPage = (req, res) => {
 
 module.exports.postNewCampground = async (req, res, next) => {
     const geoData = await geocoder.forwardGeocode({
-        query: 'Istanbul,Turkey',
+        query: req.body.campground.location,
         limit: 1
     }).send();
     console.log(geoData);
-    res.send('OK')
+    res.send(req.body)
     // const campground = new Campground(req.body.campground);
     // campground.images = req.files.map(f => ({ url: f.path, filename: f.filename }))
     // campground.author = req.user._id;
