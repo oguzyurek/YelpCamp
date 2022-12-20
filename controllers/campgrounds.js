@@ -1,4 +1,6 @@
 const Campground = require('../models/campground');
+const mbxStyles = require('@mapbox/mapbox-sdk/services/styles');
+const stylesService = process.env.MAPBOX_TOKEN
 const cloudinary = require('cloudinary').v2;
 
 module.exports.index = async (req, res) => {
@@ -52,7 +54,7 @@ module.exports.postEditPage = async (req, res, next) => {
     campground.images.push(...imgs);
     await campground.save();
     if (req.body.deleteImages) {
-        for(let filename of req.body.deleteImages){
+        for (let filename of req.body.deleteImages) {
             await cloudinary.uploader.destroy(filename);
         }
         await campground.updateOne({ $pull: { images: { filename: { $in: req.body.deleteImages } } } })
