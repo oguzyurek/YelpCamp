@@ -19,7 +19,7 @@ module.exports.postNewCampground = async (req, res, next) => {
         limit: 1
     }).send();
     console.log(geoData);
-    res.send(req.body)
+    res.send(geoData.body.features[0].geometry.coordinates)
     // const campground = new Campground(req.body.campground);
     // campground.images = req.files.map(f => ({ url: f.path, filename: f.filename }))
     // campground.author = req.user._id;
