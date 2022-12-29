@@ -4,7 +4,7 @@
         <div class="modal-body row">
             <div class="col-md-6 ">
 
-                <div id='map' style='width: 400px; height: 300px;'></div>
+                <div class="mb-2" id='map' style='width: max-width: ;; height: 300px;'></div>
                 <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
                     <div class="carousel-inner">
                         <% campground.images.forEach((img, i)=> { %>
@@ -154,27 +154,5 @@
        
     </script>
 
-    <script>
-         mapboxgl.accessToken = mapToken;
-        const map = new mapboxgl.Map({
-            container: 'map', // container ID
-            style: 'mapbox://styles/mapbox/streets-v12', // style URL
-            center: campground.geometry.coordinates, // starting position [lng, lat]
-            zoom: 9, // starting zoom
-        });
-
-        map.addControl(new mapboxgl.NavigationControl());
-
-
-new mapboxgl.Marker()
-    .setLngLat(campground.geometry.coordinates)
-    .setPopup(
-        new mapboxgl.Popup({ offset: 25 })
-            .setHTML(
-                `<h3>${campground.title}</h3><p>${campground.location}</p>`
-            )
-    )
-    .addTo(map)
-
-    </script>
+<script src="/javascript/mapBoxShowPage.js"></script>
     
