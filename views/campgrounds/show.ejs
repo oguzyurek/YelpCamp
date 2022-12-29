@@ -1,13 +1,5 @@
 <% layout('layouts/boilerplate') %>
     <link rel="stylesheet" href="/stylesheet/reviewStars.css">
-
-    <script>
-        const mapToken = '<%-process.env.MAPBOX_TOKEN%>';
-
-    </script>
-
-
-
     <div class="container mt-4 mb-4">
         <div class="modal-body row">
             <div class="col-md-6 ">
@@ -23,17 +15,15 @@
 
                     </div>
                     <% if(campground.images.length> 1) {%>
-
-                        <a class="carousel-control-prev" href="#carouselExampleControls" role="button"
-                            data-slide="prev">
+                        
+                        <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
                             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                             <span class="sr-only">Previous</span>
-                        </a>
-                        <a class="carousel-control-next" href="#carouselExampleControls" role="button"
-                            data-slide="next">
+                          </a>
+                          <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
                             <span class="carousel-control-next-icon" aria-hidden="true"></span>
                             <span class="sr-only">Next</span>
-                        </a>
+                          </a>
 
 
 
@@ -169,5 +159,3 @@
 
         </div>
     </div>
-
-    <script src="/public/javascript/mapBox.js"></script>

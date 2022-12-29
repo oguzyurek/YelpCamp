@@ -48,7 +48,15 @@
 
 <script src='https://api.mapbox.com/mapbox-gl-js/v2.11.0/mapbox-gl.js'></script>
 
-
+<script>
+        mapboxgl.accessToken = '<%-process.env.MAPBOX_TOKEN%>';
+        const map = new mapboxgl.Map({
+            container: 'map', // container ID
+            style: 'mapbox://styles/mapbox/streets-v12', // style URL
+            center: [-73.935242, 40.730610], // starting position [lng, lat]
+            zoom: 9, // starting zoom
+        });
+    </script>
             
 
 </body>
