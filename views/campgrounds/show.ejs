@@ -63,6 +63,9 @@
                 <h2>
                     <%= campground.location %>
                 </h2>
+                <h2>
+                    <%= campground.geometry.coordinates %>
+                </h2>
                 <h3 class="text-muted">
                     $<%= campground.price %>
                 </h3>
@@ -159,3 +162,22 @@
 
         </div>
     </div>
+
+    <script>
+        const mapToken = '<%-process.env.MAPBOX_TOKEN%>';
+        const campground = <%- JSON.stringify(campground) %>
+
+       
+    </script>
+
+    <script>
+         mapboxgl.accessToken = mapToken;
+        const map = new mapboxgl.Map({
+            container: 'map', // container ID
+            style: 'mapbox://styles/mapbox/streets-v12', // style URL
+            center: [28.9662187,41.0091982], // starting position [lng, lat]
+            zoom: 9, // starting zoom
+        });
+    </script>
+    
+    <script src="/javascripts/showPageMap.js"></script>
