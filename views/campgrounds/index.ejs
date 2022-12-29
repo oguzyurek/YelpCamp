@@ -1,8 +1,8 @@
 <% layout('layouts/boilerplate') %>
 
-    <div>
-        <!-- <a href="/campgrounds/new">Add Campground</a> -->
-    </div>
+
+   
+    <div class="mt-2" id='map' style='max-width: ; height: 400px;'></div>
     <div class="container mt-4 mb-4">
         <h1>All Campgrounds</h1>
 
@@ -12,7 +12,7 @@
 
 
 
-        <div id='map' style='width: 400px; height: 300px;'></div>
+        
         <% for (let campground of campgrounds){%>
 
             <div class="card">
@@ -56,26 +56,5 @@
        
     </script>
 
-<script>
-    mapboxgl.accessToken = mapToken;
-   const map = new mapboxgl.Map({
-       container: 'map', // container ID
-       style: 'mapbox://styles/mapbox/streets-v12', // style URL
-       center: campground.geometry.coordinates, // starting position [lng, lat]
-       zoom: 9, // starting zoom
-   });
 
-   map.addControl(new mapboxgl.NavigationControl());
-
-
-new mapboxgl.Marker()
-.setLngLat(campground.geometry.coordinates)
-.setPopup(
-   new mapboxgl.Popup({ offset: 25 })
-       .setHTML(
-           `<h3>${campground.title}</h3><p>${campground.location}</p>`
-       )
-)
-.addTo(map)
-
-</script>
+<script src="/javascript/mapBoxIndexPage.js"></script>
