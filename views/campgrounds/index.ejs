@@ -1,60 +1,35 @@
 <% layout('layouts/boilerplate') %>
 
+<div class="mt-2" id="map" style="max-width: ; height: 400px"></div>
+<div class="container mt-4 mb-4">
+  <h1>All Campgrounds</h1>
 
-   
-    <div class="mt-2" id='map' style='max-width: ; height: 400px;'></div>
-    <div class="container mt-4 mb-4">
-        <h1>All Campgrounds</h1>
+  <% for (let campground of campgrounds){%>
 
-
-
-
-
-
-
-        
-        <% for (let campground of campgrounds){%>
-
-            <div class="card">
-                <div class="row">
-                    <div class="col-md-4">
-                        <img class="img-fluid" src="<%=campground.images[0].url%>">
-
-                    </div>
-                    <div class="col-md-8">
-
-
-                        <div class="card-body">
-                            <h5 class="card-title">
-                                <%= campground.title %>
-                            </h5>
-                            <p class="card-text">
-                                <%= campground.description %>
-                            </p>
-                            <p class="card-text text-muted">
-                                <%= campground.location %>
-                            </p>
-                            <a href="/campgrounds/<%= campground._id %>" class="btn bg-primary">
-                                <%= campground.title %>
-                            </a>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-
-
-
-            <% }%>
-
+  <div class="card">
+    <div class="row">
+      <div class="col-md-4">
+        <img class="img-fluid" src="<%=campground.images[0].url%>" />
+      </div>
+      <div class="col-md-8">
+        <div class="card-body">
+          <h5 class="card-title"><%= campground.title %></h5>
+          <p class="card-text"><%= campground.description %></p>
+          <p class="card-text text-muted"><%= campground.location %></p>
+          <a href="/campgrounds/<%= campground._id %>" class="btn bg-primary">
+            <%= campground.title %>
+          </a>
+        </div>
+      </div>
     </div>
+  </div>
 
-    <script>
-        const mapToken = '<%-process.env.MAPBOX_TOKEN%>';
-        const campground = <%- JSON.stringify(campgrounds[0]) %>
+  <% }%>
+</div>
 
-       
-    </script>
-
+<script>
+  const mapToken = '<%-process.env.MAPBOX_TOKEN%>';
+  const campground = <%- JSON.stringify(campgrounds[0]) %>
+</script>
 
 <script src="/javascript/mapBoxIndexPage.js"></script>
