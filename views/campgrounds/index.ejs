@@ -30,6 +30,7 @@
 <script>
   const mapToken = '<%-process.env.MAPBOX_TOKEN%>';
   const campground = <%- JSON.stringify(campgrounds[0]) %>
+  const campgrounds = {features:<%- JSON.stringify(campgrounds) %>}
 </script>
 
 <script src="/javascript/mapBoxIndexPage.js"></script>
