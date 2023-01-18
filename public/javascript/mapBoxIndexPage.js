@@ -118,7 +118,7 @@ map.on("load", () => {
 
     new mapboxgl.Popup()
       .setLngLat(coordinates)
-      .setHTML(`magnitude: ${mag}<br>Was there a tsunami?: ${tsunami}`)
+      .setHTML(`<h5>Campground</h5>`)
       .addTo(map);
   });
 
