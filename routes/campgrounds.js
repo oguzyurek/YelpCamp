@@ -15,6 +15,8 @@ const multer = require("multer");
 const { storage } = require("../cloudinary");
 const upload = multer({ storage });
 
+
+
 router.get("/new", isLoggedIn, campgrounds.renderNewPage);
 
 router

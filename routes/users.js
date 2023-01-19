@@ -5,6 +5,8 @@ const catchAsync = require("../utils/catchAsync");
 const users = require("../controllers/users");
 const User = require("../models/user");
 
+router.route("/").get(users.renderHomePage);
+
 router
   .route("/register")
   .get(users.renderRegisterPage)

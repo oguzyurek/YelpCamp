@@ -2,6 +2,10 @@ const Review = require("../models/review");
 const Campground = require("../models/campground");
 const User = require("../models/user");
 
+module.exports.renderHomePage = async (req, res) => {
+  res.render("../views/home");
+};
+
 module.exports.renderRegisterPage = async (req, res) => {
   res.render("../views/users/register");
 };
