@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const opts = { toJSON: { virtuals: true } };
 const { campgroundSchema } = require("../schemas");
 const review = require("./review");
 const Schema = mongoose.Schema;
@@ -12,34 +13,37 @@ ImageSchema.virtual("thumbnail").get(function () {
   return this.url.replace("/upload", "/upload/w_200");
 });
 
-const CampgroundSchema = new Schema({
-  title: String,
-  images: [ImageSchema],
-  price: Number,
-  description: String,
-  geometry: {
-    type: {
-      type: String,
-      enum: ["Point"],
-      required: false,
+const CampgroundSchema = new Schema(
+  {
+    title: String,
+    images: [ImageSchema],
+    price: Number,
+    description: String,
+    geometry: {
+      type: {
+        type: String,
+        enum: ["Point"],
+        required: false,
+      },
+      coordinates: {
+        type: [Number],
+        required: false,
+      },
     },
-    coordinates: {
-      type: [Number],
-      required: false,
-    },
-  },
-  location: String,
-  author: {
-    type: Schema.Types.ObjectId,
-    ref: "User",
-  },
-  reviews: [
-    {
+    location: String,
+    author: {
       type: Schema.Types.ObjectId,
-      ref: "Review",
+      ref: "User",
     },
-  ],
-});
+    reviews: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Review",
+      },
+    ],
+  },
+  opts
+);
 
 CampgroundSchema.virtual("properties.popUpMarkup").get(function () {
   return "I AM POP UP!!!";
