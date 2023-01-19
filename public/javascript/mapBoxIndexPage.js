@@ -19,6 +19,8 @@ new mapboxgl.Marker()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+console.log(campgrounds);
+
 map.on("load", () => {
   // Add a new source from our GeoJSON data and
   // set the 'cluster' option to true. GL-JS will
@@ -119,6 +121,7 @@ map.on("load", () => {
     new mapboxgl.Popup()
       .setLngLat(coordinates)
       .setHTML(`<h5>Campground</h5>`)
+      .setHTML(campground.properties.popUpMarkup)
       .addTo(map);
   });
 
