@@ -87,7 +87,6 @@ passport.deserializeUser(User.deserializeUser());
 /////ROUTES/////ROUTES/////ROUTES/////ROUTES/////ROUTES/////ROUTES////
 
 app.use((req, res, next) => {
-  console.log(req.query);
   res.locals.currentUser = req.user; // you can reach to currentUser in all the pages.
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");
@@ -113,26 +112,14 @@ app.use("/campgrounds/:id/reviews", reviewRoutes);
 /////ROUTES/////ROUTES/////ROUTES/////ROUTES/////ROUTES/////ROUTES////
 
 /////ERROR/////ERROR/////ERROR/////ERROR/////ERROR/////ERROR/////ERROR/////ERROR
-
-const handleValidationErr = (err) => {
-  console.dir(err);
-  return new AppError(`Validation Failed...${err.message}`, 400);
-};
-
-app.use((err, req, res, next) => {
-  console.log(err.name);
-  if (err.name === " ValidationError") err = handleValidationErr(err);
-  next(err);
-});
-
 app.all("*", (req, res, next) => {
   next(new ExpressError("Page Not Found", 404));
 });
 
 app.use((err, req, res, next) => {
   const { statusCode = 500 } = err;
-  if (!err.message) err.message = "Oh no, Something went wrong!";
-  res.redirect("/campgrounds");
+  if (!err.message) err.message = "Oh No, Something Went Wrong!";
+  res.status(statusCode).render("error", { err });
 });
 
 /////ERROR/////ERROR/////ERROR/////ERROR/////ERROR/////ERROR/////ERROR/////ERROR
