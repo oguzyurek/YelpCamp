@@ -67,7 +67,11 @@ app.use(express.static("public"));
 
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(mongoSanitize());
+app.use(
+  mongoSanitize({
+    replaceWith: "_",
+  })
+);
 passport.use(new LocalStrategy(User.authenticate()));
 
 passport.serializeUser(User.serializeUser());
