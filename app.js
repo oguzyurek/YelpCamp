@@ -17,11 +17,13 @@ const ExpressError = require("./utils/ExpressError");
 const { wrap } = require("module");
 const session = require("express-session");
 const sessionOption = {
+  name:'session11'
   secret: "thisisasecret",
   resave: false,
   saveUninitialized: true,
   cookie: {
     httpOnly: true,
+    // secure: true,
     expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
     maxAge: 1000 * 60 * 60 * 24 * 7,
   },
