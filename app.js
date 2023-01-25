@@ -34,6 +34,8 @@ const userRoutes = require("./routes/users");
 const campgroundRoutes = require("./routes/campgrounds");
 const reviewRoutes = require("./routes/reviews");
 const user = require("./models/user");
+const bodyParser = require("body-parser");
+const mongoSanitize = require("express-mongo-sanitize");
 
 /////DATABASE/////DATABASE/////DATABASE/////DATABASE/////DATABASE/////DATABASE
 
@@ -65,6 +67,7 @@ app.use(express.static("public"));
 
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(mongoSanitize());
 passport.use(new LocalStrategy(User.authenticate()));
 
 passport.serializeUser(User.serializeUser());
@@ -80,6 +83,7 @@ passport.deserializeUser(User.deserializeUser());
 /////ROUTES/////ROUTES/////ROUTES/////ROUTES/////ROUTES/////ROUTES////
 
 app.use((req, res, next) => {
+  console.log(req.query);
   res.locals.currentUser = req.user; // you can reach to currentUser in all the pages.
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");
