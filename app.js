@@ -17,7 +17,7 @@ const ExpressError = require("./utils/ExpressError");
 const { wrap } = require("module");
 const session = require("express-session");
 const sessionOption = {
-  name: "session11",
+  name:'session11',
   secret: "thisisasecret",
   resave: false,
   saveUninitialized: true,
@@ -38,7 +38,6 @@ const reviewRoutes = require("./routes/reviews");
 const user = require("./models/user");
 const bodyParser = require("body-parser");
 const mongoSanitize = require("express-mongo-sanitize");
-const helmet = require("helmet");
 
 /////DATABASE/////DATABASE/////DATABASE/////DATABASE/////DATABASE/////DATABASE
 
@@ -60,12 +59,14 @@ db.once("open", () => {
 app.engine("ejs", ejsMate);
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
+
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.use(morgan("dev"));
 app.use(session(sessionOption));
 app.use(flash());
 app.use(express.static("public"));
+
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(
@@ -74,7 +75,6 @@ app.use(
   })
 );
 passport.use(new LocalStrategy(User.authenticate()));
-app.use(helmet());
 
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
