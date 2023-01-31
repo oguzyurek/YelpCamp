@@ -1,5 +1,7 @@
+// if (process.env.NODE_ENV !== "production") {
+//   require('dotenv').config();
+// }
 require("dotenv").config();
-console.log(process.env);
 
 const express = require("express");
 const path = require("path");
@@ -17,7 +19,7 @@ const ExpressError = require("./utils/ExpressError");
 const { wrap } = require("module");
 const session = require("express-session");
 const sessionOption = {
-  name:'session11',
+  name: "session11",
   secret: "thisisasecret",
   resave: false,
   saveUninitialized: true,
