@@ -43,8 +43,9 @@ const bodyParser = require("body-parser");
 const mongoSanitize = require("express-mongo-sanitize");
 
 /////DATABASE/////DATABASE/////DATABASE/////DATABASE/////DATABASE/////DATABASE
-
-mongoose.connect("mongodb://localhost:27017/yelp-camp", {
+// "mongodb://localhost:27017/yelp-camp"
+const dbUrl = process.env.DB_URL;
+mongoose.connect(dbUrl, {
   useNewUrlParser: true,
   useCreateIndex: true,
   useUnifiedTopology: true,

@@ -36,7 +36,7 @@ const seedDB = async () => {
       },
       images: [
         {
-          url: "https://res.cloudinary.com/dlznt9a8n/image/upload/v1668950581/YelpCamp/dpbryb0bxuiwstzcafho.jpg",
+          url: "https://res.cloudinary.com/dlznt9a8n/image/upload/v1675143788/YelpCamp/qsyb8xl5dyl5supcfqm8.jpg",
           filename: "YelpCamp/cckyfotay9ajcuwxh5ez",
         },
       ],
