@@ -41,7 +41,8 @@ const reviewRoutes = require("./routes/reviews");
 const user = require("./models/user");
 const bodyParser = require("body-parser");
 const mongoSanitize = require("express-mongo-sanitize");
-
+const session = require("express-session");
+const MongoStore = require("connect-mongo");
 /////DATABASE/////DATABASE/////DATABASE/////DATABASE/////DATABASE/////DATABASE
 // "mongodb://localhost:27017/yelp-camp"
 const dbUrl = process.env.DB_URL;
@@ -78,6 +79,14 @@ app.use(
     replaceWith: "_",
   })
 );
+
+app.use(
+  session({
+    secret: "foo",
+    store: MongoStore.create(options),
+  })
+);
+
 passport.use(new LocalStrategy(User.authenticate()));
 
 app.use(helmet());
