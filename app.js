@@ -19,18 +19,7 @@ const AppError = require("./utils/AppError");
 const ExpressError = require("./utils/ExpressError");
 const { wrap } = require("module");
 const session = require("express-session");
-const sessionOption = {
-  name: "session11",
-  secret: "thisisasecret",
-  resave: false,
-  saveUninitialized: true,
-  cookie: {
-    httpOnly: true,
-    // secure: true,
-    expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
-    maxAge: 1000 * 60 * 60 * 24 * 7,
-  },
-};
+
 const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
@@ -41,11 +30,11 @@ const reviewRoutes = require("./routes/reviews");
 const user = require("./models/user");
 const bodyParser = require("body-parser");
 const mongoSanitize = require("express-mongo-sanitize");
-const session = require("express-session");
-const MongoStore = require("connect-mongo");
+const MongoDBStore = require("connect-mongo");
 /////DATABASE/////DATABASE/////DATABASE/////DATABASE/////DATABASE/////DATABASE
 // "mongodb://localhost:27017/yelp-camp"
-const dbUrl = process.env.DB_URL;
+// const dbUrl = process.env.DB_URL;
+const dbUrl = "mongodb://localhost:27017/yelp-camp";
 mongoose.connect(dbUrl, {
   useNewUrlParser: true,
   useCreateIndex: true,
@@ -68,7 +57,33 @@ app.set("views", path.join(__dirname, "views"));
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.use(morgan("dev"));
+
+app.use(
+  session({
+    secret: "keyboard cat",
+    saveUninitialized: false, // don't create session until something stored
+    resave: false, //don't save session if unmodified
+    store: MongoDBStore.create({
+      mongoUrl: dbUrl,
+      touchAfter: 24 * 60 * 60, // time period in seconds
+    }),
+  })
+);
+
+const sessionOption = {
+  name: "session11",
+  secret: "thisisasecret",
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    httpOnly: true,
+    // secure: true,
+    expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
+    maxAge: 1000 * 60 * 60 * 24 * 7,
+  },
+};
 app.use(session(sessionOption));
+
 app.use(flash());
 app.use(express.static("public"));
 
@@ -77,13 +92,6 @@ app.use(passport.session());
 app.use(
   mongoSanitize({
     replaceWith: "_",
-  })
-);
-
-app.use(
-  session({
-    secret: "foo",
-    store: MongoStore.create(options),
   })
 );
 
