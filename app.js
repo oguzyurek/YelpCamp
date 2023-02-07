@@ -34,7 +34,7 @@ const MongoDBStore = require("connect-mongo");
 /////DATABASE/////DATABASE/////DATABASE/////DATABASE/////DATABASE/////DATABASE
 // "mongodb://localhost:27017/yelp-camp"
 // const dbUrl = process.env.DB_URL;
-const dbUrl = "mongodb://localhost:27017/yelp-camp";
+const dbUrl = process.env.DB_URL || "mongodb://localhost:27017/yelp-camp";
 mongoose.connect(dbUrl, {
   useNewUrlParser: true,
   useCreateIndex: true,
@@ -70,10 +70,12 @@ app.use(morgan("dev"));
 //   })
 // );
 
+const secret = process.env.SECRET || "thisisasecret";
+
 const store = MongoDBStore.create({
   mongoUrl: "mongodb://localhost/test-app",
   crypto: {
-    secret: "squirrel",
+    secret,
   },
 });
 
@@ -84,7 +86,7 @@ store.on("error", function (e) {
 const sessionOption = {
   store,
   name: "session11",
-  secret: "thisisasecret",
+  secret,
   resave: false,
   saveUninitialized: true,
   cookie: {
