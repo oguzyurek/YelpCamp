@@ -58,19 +58,31 @@ app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.use(morgan("dev"));
 
-app.use(
-  session({
-    secret: "keyboard cat",
-    saveUninitialized: false, // don't create session until something stored
-    resave: false, //don't save session if unmodified
-    store: MongoDBStore.create({
-      mongoUrl: dbUrl,
-      touchAfter: 24 * 60 * 60, // time period in seconds
-    }),
-  })
-);
+// app.use(
+//   session({
+//     secret: "keyboard cat",
+//     saveUninitialized: false, // don't create session until something stored
+//     resave: false, //don't save session if unmodified
+//     store: MongoDBStore.create({
+//       mongoUrl: dbUrl,
+//       touchAfter: 24 * 60 * 60, // time period in seconds
+//     }),
+//   })
+// );
+
+const store = MongoDBStore.create({
+  mongoUrl: "mongodb://localhost/test-app",
+  crypto: {
+    secret: "squirrel",
+  },
+});
+
+store.on("error", function (e) {
+  console.log("SESSION ERROR", e);
+});
 
 const sessionOption = {
+  store,
   name: "session11",
   secret: "thisisasecret",
   resave: false,
