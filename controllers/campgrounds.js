@@ -10,7 +10,6 @@ module.exports.index = async (req, res) => {
   res.render("campgrounds/index", { campgrounds });
 };
 
-
 module.exports.renderNewPage = (req, res) => {
   res.render("campgrounds/new");
 };
@@ -64,7 +63,13 @@ module.exports.renderEditPage = async (req, res, next) => {
 
 module.exports.postEditPage = async (req, res, next) => {
   const { id } = req.params;
-  console.log(req.body);
+  const geoData = await geocoder
+    .forwardGeocode({
+      query: req.body.campground.location,
+      limit: 1,
+    })
+    .send();
+  req.body.campground.geometry = geoData.body.features[0].geometry;
   const campground = await Campground.findByIdAndUpdate(id, {
     ...req.body.campground,
   });
